@@ -75,87 +75,86 @@ char HTTP_ALPN[128] = "http/1.1";
 #define DEFAULT_GENERAL_RELAY_SERVERS_NUMBER (1)
 
 turn_params_t turn_params = {
-NULL, NULL,
+		NULL, NULL,
 #if TLSv1_1_SUPPORTED
-	NULL,
+NULL,
 #if TLSv1_2_SUPPORTED
 	NULL,
 #endif
 #endif
 #if DTLS_SUPPORTED
-NULL,
+		NULL,
 #endif
 #if DTLSv1_2_SUPPORTED
-NULL,
+		NULL,
 #endif
 
-DH_1066, "", "", "",
-"turn_server_cert.pem","turn_server_pkey.pem", "", "",
-0,0,0,
+		DH_1066, "", "", "",
+		"turn_server_cert.pem","turn_server_pkey.pem", "", "",
+		0,0,0,
 #if !TLS_SUPPORTED
-1,
+		1,
 #else
-0,
+		0,
 #endif
 
 #if !DTLS_SUPPORTED
-1,
+		1,
 #else
-0,
+		0,
 #endif
 
-NULL, PTHREAD_MUTEX_INITIALIZER,
+		NULL, PTHREAD_MUTEX_INITIALIZER,
 
-TURN_VERBOSE_NONE,0,0,0,
-"/var/run/turnserver.pid",
-DEFAULT_STUN_PORT,DEFAULT_STUN_TLS_PORT,0,0,1,
-0,0,0,0,
-"",
-"",0,
-{
-  NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,0,0,NULL,NULL,NULL
-},
-{NULL, 0},{NULL, 0},
-NEV_UNKNOWN,
-{ "Unknown", "UDP listening socket per session", "UDP thread per network endpoint", "UDP thread per CPU core" },
+		TURN_VERBOSE_NONE,0,0,0,
+		"/var/run/turnserver.pid",
+		DEFAULT_STUN_PORT,DEFAULT_STUN_TLS_PORT,0,0,1,
+		0,0,0,0,
+		"",
+		"",0,
+		{
+				NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,0,0,NULL,NULL,NULL
+		},
+		{NULL, 0},{NULL, 0},
+		NEV_UNKNOWN,
+		{ "Unknown", "UDP listening socket per session", "UDP thread per network endpoint", "UDP thread per CPU core" },
 //////////////// Relay servers //////////////////////////////////
-LOW_DEFAULT_PORTS_BOUNDARY,HIGH_DEFAULT_PORTS_BOUNDARY,0,0,0,"",
-0,NULL,0,NULL,DEFAULT_GENERAL_RELAY_SERVERS_NUMBER,0,
+		LOW_DEFAULT_PORTS_BOUNDARY,HIGH_DEFAULT_PORTS_BOUNDARY,0,0,0,"",
+		0,NULL,0,NULL,DEFAULT_GENERAL_RELAY_SERVERS_NUMBER,0,
 ////////////// Auth server /////////////////////////////////////
-"","",0,
+		"","",0,
 /////////////// AUX SERVERS ////////////////
-{NULL,0,{0,NULL}},0,
+		{NULL,0,{0,NULL}},0,
 /////////////// ALTERNATE SERVERS ////////////////
-{NULL,0,{0,NULL}},{NULL,0,{0,NULL}},
+		{NULL,0,{0,NULL}},{NULL,0,{0,NULL}},
 /////////////// stop server ////////////////
-0,
+		0,
 /////////////// MISC PARAMS ////////////////
-0, /* stun_only */
-0, /* no_stun */
-0, /* secure_stun */
-0, /* server_relay */
-0, /* fingerprint */
-':', /* rest_api_separator */
-STUN_DEFAULT_NONCE_EXPIRATION_TIME, /* stale_nonce */
-STUN_DEFAULT_MAX_ALLOCATE_LIFETIME, /* max_allocate_lifetime */
-STUN_DEFAULT_CHANNEL_LIFETIME, /* channel_lifetime */
-STUN_DEFAULT_PERMISSION_LIFETIME, /* permission_lifetime */
-0, /* mobility */
-TURN_CREDENTIALS_NONE, /* ct */
-0, /* use_auth_secret_with_timestamp */
-0, /* max_bps */
-0, /* bps_capacity */
-0, /* bps_capacity_allocated */
-0, /* total_quota */
-0, /* user_quota */
+		0, /* stun_only */
+		0, /* no_stun */
+		0, /* secure_stun */
+		0, /* server_relay */
+		0, /* fingerprint */
+		':', /* rest_api_separator */
+		STUN_DEFAULT_NONCE_EXPIRATION_TIME, /* stale_nonce */
+		STUN_DEFAULT_MAX_ALLOCATE_LIFETIME, /* max_allocate_lifetime */
+		STUN_DEFAULT_CHANNEL_LIFETIME, /* channel_lifetime */
+		STUN_DEFAULT_PERMISSION_LIFETIME, /* permission_lifetime */
+		0, /* mobility */
+		TURN_CREDENTIALS_NONE, /* ct */
+		0, /* use_auth_secret_with_timestamp */
+		0, /* max_bps */
+		0, /* bps_capacity */
+		0, /* bps_capacity_allocated */
+		0, /* total_quota */
+		0, /* user_quota */
 ///////////// Users DB //////////////
-{ (TURN_USERDB_TYPE)0, {"\0"}, {0,NULL, {NULL,0}} },
+		{ (TURN_USERDB_TYPE)0, {"\0"}, {0,NULL, {NULL,0}} },
 ///////////// CPUs //////////////////
-DEFAULT_CPUS_NUMBER,
+		DEFAULT_CPUS_NUMBER,
 ///////// Encryption /////////
-"", /* secret_key_file */
-"", /* secret_key */
-0   /* allow_encoding */
+		"", /* secret_key_file */
+		"", /* secret_key */
 };
 
 //////////////// OpenSSL Init //////////////////////
@@ -206,20 +205,20 @@ static int make_local_listeners_list(void)
 
 			if (ifa ->ifa_addr->sa_family == AF_INET) {
 				if(!inet_ntop(AF_INET, &((struct sockaddr_in *) ifa->ifa_addr)->sin_addr, saddr,
-								INET_ADDRSTRLEN))
+							  INET_ADDRSTRLEN))
 					continue;
 				if(strstr(saddr,"169.254.") == saddr)
 					continue;
 				if(!strcmp(saddr,"0.0.0.0"))
-				  continue;
+					continue;
 			} else if (ifa->ifa_addr->sa_family == AF_INET6) {
 				if(!inet_ntop(AF_INET6, &((struct sockaddr_in6 *) ifa->ifa_addr)->sin6_addr, saddr,
-								INET6_ADDRSTRLEN))
+							  INET6_ADDRSTRLEN))
 					continue;
 				if(strstr(saddr,"fe80") == saddr)
 					continue;
 				if(!strcmp(saddr,"::"))
-				  continue;
+					continue;
 			} else {
 				continue;
 			}
@@ -266,24 +265,24 @@ static int make_local_relays_list(int allow_local, int family)
 					continue;
 
 				if(!inet_ntop(AF_INET, &((struct sockaddr_in *) ifa->ifa_addr)->sin_addr, saddr,
-								INET_ADDRSTRLEN))
+							  INET_ADDRSTRLEN))
 					continue;
 				if(strstr(saddr,"169.254.") == saddr)
 					continue;
 				if(!strcmp(saddr,"0.0.0.0"))
-				  continue;
+					continue;
 			} else if (ifa->ifa_addr->sa_family == AF_INET6) {
 
 				if(family != AF_INET6)
 					continue;
 
 				if(!inet_ntop(AF_INET6, &((struct sockaddr_in6 *) ifa->ifa_addr)->sin6_addr, saddr,
-								INET6_ADDRSTRLEN))
+							  INET6_ADDRSTRLEN))
 					continue;
 				if(strstr(saddr,"fe80") == saddr)
 					continue;
 				if(!strcmp(saddr,"::"))
-				  continue;
+					continue;
 			} else
 				continue;
 
@@ -335,8 +334,8 @@ int get_a_local_relay(int family, ioa_addr *relay_addr)
 						continue;
 
 					if (!inet_ntop(AF_INET,
-							&((struct sockaddr_in *) ifa->ifa_addr)->sin_addr,
-							saddr, INET_ADDRSTRLEN))
+								   &((struct sockaddr_in *) ifa->ifa_addr)->sin_addr,
+								   saddr, INET_ADDRSTRLEN))
 						continue;
 					if (strstr(saddr, "169.254.") == saddr)
 						continue;
@@ -348,8 +347,8 @@ int get_a_local_relay(int family, ioa_addr *relay_addr)
 						continue;
 
 					if (!inet_ntop(AF_INET6,
-							&((struct sockaddr_in6 *) ifa->ifa_addr)->sin6_addr,
-							saddr, INET6_ADDRSTRLEN))
+								   &((struct sockaddr_in6 *) ifa->ifa_addr)->sin6_addr,
+								   saddr, INET6_ADDRSTRLEN))
 						continue;
 					if (strstr(saddr, "fe80") == saddr)
 						continue;
@@ -381,320 +380,317 @@ int get_a_local_relay(int family, ioa_addr *relay_addr)
 //////////////////////////////////////////////////
 
 static char Usage[] = "Usage: turnserver [options]\n"
-"Options:\n"
-" -d, --listening-device	<device-name>		Listener interface device (NOT RECOMMENDED. Optional, Linux only).\n"
-" -p, --listening-port		<port>		TURN listener port (Default: 3478).\n"
-"						Note: actually, TLS & DTLS sessions can connect to the \"plain\" TCP & UDP port(s), too,\n"
-"						if allowed by configuration.\n"
-" --tls-listening-port		<port>		TURN listener port for TLS & DTLS listeners\n"
-"						(Default: 5349).\n"
-"						Note: actually, \"plain\" TCP & UDP sessions can connect to the TLS & DTLS port(s), too,\n"
-"						if allowed by configuration. The TURN server\n"
-"						\"automatically\" recognizes the type of traffic. Actually, two listening\n"
-"						endpoints (the \"plain\" one and the \"tls\" one) are equivalent in terms of\n"
-"						functionality; but we keep both endpoints to satisfy the RFC 5766 specs.\n"
-"						For secure TCP connections, we currently support SSL version 3 and\n"
-"						TLS versions 1.0, 1.1 and 1.2. For secure UDP connections, we support\n"
-"						DTLS version 1.\n"
-" --alt-listening-port<port>	<port>		Alternative listening port for STUN CHANGE_REQUEST (in RFC 5780 sense, \n"
-"                                                or in old RFC 3489 sense, default is \"listening port plus one\").\n"
-" --alt-tls-listening-port	<port>		Alternative listening port for TLS and DTLS,\n"
-" 						the default is \"TLS/DTLS port plus one\".\n"
-" -L, --listening-ip		<ip>		Listener IP address of relay server. Multiple listeners can be specified.\n"
-" --aux-server			<ip:port>	Auxiliary STUN/TURN server listening endpoint.\n"
-"						Auxiliary servers do not have alternative ports and\n"
-"						they do not support RFC 5780 functionality (CHANGE REQUEST).\n"
-"						Valid formats are 1.2.3.4:5555 for IPv4 and [1:2::3:4]:5555 for IPv6.\n"
-" --udp-self-balance				(recommended for older Linuxes only) Automatically balance UDP traffic\n"
-"						over auxiliary servers (if configured).\n"
-"						The load balancing is using the ALTERNATE-SERVER mechanism.\n"
-"						The TURN client must support 300 ALTERNATE-SERVER response for this functionality.\n"
-" -i, --relay-device		<device-name>	Relay interface device for relay sockets (NOT RECOMMENDED. Optional, Linux only).\n"
-" -E, --relay-ip		<ip>			Relay address (the local IP address that will be used to relay the\n"
-"						packets to the peer).\n"
-"						Multiple relay addresses may be used.\n"
-"						The same IP(s) can be used as both listening IP(s) and relay IP(s).\n"
-"						If no relay IP(s) specified, then the turnserver will apply the default\n"
-"						policy: it will decide itself which relay addresses to be used, and it\n"
-"						will always be using the client socket IP address as the relay IP address\n"
-"						of the TURN session (if the requested relay address family is the same\n"
-"						as the family of the client socket).\n"
-" -X, --external-ip  <public-ip[/private-ip]>	TURN Server public/private address mapping, if the server is behind NAT.\n"
-"						In that situation, if a -X is used in form \"-X ip\" then that ip will be reported\n"
-"						as relay IP address of all allocations. This scenario works only in a simple case\n"
-"						when one single relay address is be used, and no STUN CHANGE_REQUEST\n"
-"						functionality is required.\n"
-"						That single relay address must be mapped by NAT to the 'external' IP.\n"
-"						For that 'external' IP, NAT must forward ports directly (relayed port 12345\n"
-"						must be always mapped to the same 'external' port 12345).\n"
-"						In more complex case when more than one IP address is involved,\n"
-"						that option must be used several times in the command line, each entry must\n"
-"						have form \"-X public-ip/private-ip\", to map all involved addresses.\n"
-" --no-loopback-peers				Disallow peers on the loopback addresses (127.x.x.x and ::1).\n"
-" --no-multicast-peers				Disallow peers on well-known broadcast addresses (224.0.0.0 and above, and FFXX:*).\n"
-" -m, --relay-threads		<number>	Number of relay threads to handle the established connections\n"
-"						(in addition to authentication thread and the listener thread).\n"
-"						If explicitly set to 0 then application runs in single-threaded mode.\n"
-"						If not set then a default OS-dependent optimal algorithm will be employed.\n"
-"						The default thread number is the number of CPUs.\n"
-"						In older systems (pre-Linux 3.9) the number of UDP relay threads always equals\n"
-"						the number of listening endpoints (unless -m 0 is set).\n"
-" --min-port			<port>		Lower bound of the UDP port range for relay endpoints allocation.\n"
-"						Default value is 49152, according to RFC 5766.\n"
-" --max-port			<port>		Upper bound of the UDP port range for relay endpoints allocation.\n"
-"						Default value is 65535, according to RFC 5766.\n"
-" -v, --verbose					'Moderate' verbose mode.\n"
-" -V, --Verbose					Extra verbose mode, very annoying (for debug purposes only).\n"
-" -o, --daemon					Start process as daemon (detach from current shell).\n"
-" --prod       	 				Production mode: hide the software version.\n"
-" -f, --fingerprint				Use fingerprints in the TURN messages.\n"
-" -a, --lt-cred-mech				Use the long-term credential mechanism.\n"
-" -z, --no-auth					Do not use any credential mechanism, allow anonymous access.\n"
-" -u, --user			<user:pwd>	User account, in form 'username:password', for long-term credentials.\n"
-"						Cannot be used with TURN REST API.\n"
-" -r, --realm			<realm>		The default realm to be used for the users when no explicit\n"
-"						origin/realm relationship was found in the database.\n"
-"						Must be used with long-term credentials \n"
-"						mechanism or with TURN REST API.\n"
-" --check-origin-consistency			The flag that sets the origin consistency check:\n"
-"						across the session, all requests must have the same\n"
-"						main ORIGIN attribute value (if the ORIGIN was\n"
-"						initially used by the session).\n"
-" -q, --user-quota		<number>	Per-user allocation quota: how many concurrent allocations a user can create.\n"
-"						This option can also be set through the database, for a particular realm.\n"
-" -Q, --total-quota		<number>	Total allocations quota: global limit on concurrent allocations.\n"
-"						This option can also be set through the database, for a particular realm.\n"
-" -s, --max-bps			<number>	Default max bytes-per-second bandwidth a TURN session is allowed to handle\n"
-"						(input and output network streams are treated separately). Anything above\n"
-"						that limit will be dropped or temporary suppressed\n"
-"						(within the available buffer limits).\n"
-"						This option can also be set through the database, for a particular realm.\n"
-" -B, --bps-capacity		<number>	Maximum server capacity.\n"
-"						Total bytes-per-second bandwidth the TURN server is allowed to allocate\n"
-"						for the sessions, combined (input and output network streams are treated separately).\n"
-" -c				<filename>	Configuration file name (default - turnserver.conf).\n"
-#if !defined(TURN_NO_SQLITE)
-" -b, , --db, --userdb	<filename>		SQLite database file name; default - /var/db/turndb or\n"
-"						    /usr/local/var/db/turndb or /var/lib/turn/turndb.\n"
-#endif
-#if !defined(TURN_NO_PQ)
-" -e, --psql-userdb, --sql-userdb <conn-string>	PostgreSQL database connection string, if used (default - empty, no PostreSQL DB used).\n"
-"		                                This database can be used for long-term credentials mechanism users,\n"
-"		                                and it can store the secret value(s) for secret-based timed authentication in TURN RESP API.\n"
-"						See http://www.postgresql.org/docs/8.4/static/libpq-connect.html for 8.x PostgreSQL\n"
-"						versions format, see \n"
-"						http://www.postgresql.org/docs/9.2/static/libpq-connect.html#LIBPQ-CONNSTRING\n"
-"						for 9.x and newer connection string formats.\n"
-#endif
-#if !defined(TURN_NO_MYSQL)
-" -M, --mysql-userdb	<connection-string>	MySQL database connection string, if used (default - empty, no MySQL DB used).\n"
-"	                                	This database can be used for long-term credentials mechanism users,\n"
-"		                                and it can store the secret value(s) for secret-based timed authentication in TURN RESP API.\n"
-"						The connection string my be space-separated list of parameters:\n"
-"	        	          		\"host=<ip-addr> dbname=<database-name> user=<database-user> \\\n							password=<database-user-password> port=<db-port> connect_timeout=<seconds> read_timeout=<seconds>\".\n\n"
-"						The connection string parameters for the secure communications (SSL):\n"
-"						ca, capath, cert, key, cipher\n"
-"						(see http://dev.mysql.com/doc/refman/5.1/en/ssl-options.html for the\n"
-"						command options description).\n\n"
-"	        	          		All connection-string parameters are optional.\n\n"
-"--secret-key-file	<filename>		If you want to use password as encrpyted in the mysql connection string MySQL encrypted connection, this is key path.\n"
-"						This is the file path which contain secret key of aes encryption while using password encryption.\n"
-"						This attribute should be use if allow-encoding-with-aes set to 1.\n"
-"--allow-encoding-with-aes	<1/0>		If you want to use password as encrpyted in the mysql connection string. Set allow-encoding-with-aes to 1.\n"
-"						If you want to use clearteaxt password in the mysql connection string. Set allow-encoding-with-aes to 0.\n"
-"						You have to enable secret-key-file attribute above as a key location.\n"
-#endif
-#if !defined(TURN_NO_MONGO)
-" -J, --mongo-userdb	<connection-string>	MongoDB connection string, if used (default - empty, no MongoDB used).\n"
-"	                                	This database can be used for long-term credentials mechanism users,\n"
-"		                                and it can store the secret value(s) for secret-based timed authentication in TURN RESP API.\n"
-#endif
-#if !defined(TURN_NO_HIREDIS)
-" -N, --redis-userdb	<connection-string>	Redis user database connection string, if used (default - empty, no Redis DB used).\n"
-"	                                	This database can be used for long-term credentials mechanism users,\n"
-"		                                and it can store the secret value(s) for secret-based timed authentication in TURN RESP API.\n"
-"						The connection string my be space-separated list of parameters:\n"
-"	        	          		\"host=<ip-addr> dbname=<db-number> \\\n								password=<database-user-password> port=<db-port> connect_timeout=<seconds>\".\n\n"
-"	        	          		All connection-string parameters are optional.\n\n"
-" -O, --redis-statsdb	<connection-string>	Redis status and statistics database connection string, if used \n"
-"						(default - empty, no Redis stats DB used).\n"
-"	                                	This database keeps allocations status information, and it can be also used for publishing\n"
-"		                                and delivering traffic and allocation event notifications.\n"
-"						The connection string has the same parameters as redis-userdb connection string.\n"
-#endif
-" --use-auth-secret				TURN REST API flag.\n"
-"						Flag that sets a special authorization option that is based upon authentication secret\n"
-"						(TURN Server REST API, see TURNServerRESTAPI.pdf). This option is used with timestamp.\n"
-" --static-auth-secret		<secret>	'Static' authentication secret value (a string) for TURN REST API only.\n"
-"						If not set, then the turn server will try to use the 'dynamic' value\n"
-"						in turn_secret table in user database (if present).\n"
-"						That database value can be changed on-the-fly\n"
-"						by a separate program, so this is why it is 'dynamic'.\n"
-"						Multiple shared secrets can be used (both in the database and in the \"static\" fashion).\n"
-" --server-name					Server name used for\n"
-"						the oAuth authentication purposes.\n"
-"						The default value is the realm name.\n"
-" --oauth					Support oAuth authentication.\n"
-" -n						Do not use configuration file, take all parameters from the command line only.\n"
-" --cert			<filename>		Certificate file, PEM format. Same file search rules\n"
-"						applied as for the configuration file.\n"
-"						If both --no-tls and --no_dtls options\n"
-"						are specified, then this parameter is not needed.\n"
-" --pkey			<filename>		Private key file, PEM format. Same file search rules\n"
-"						applied as for the configuration file.\n"
-"						If both --no-tls and --no-dtls options\n"
-" --pkey-pwd		<password>		If the private key file is encrypted, then this password to be used.\n"
-" --cipher-list	<\"cipher-string\">		Allowed OpenSSL cipher list for TLS/DTLS connections.\n"
-"						Default value is \"DEFAULT\".\n"
-" --CA-file		<filename>		CA file in OpenSSL format.\n"
-"						Forces TURN server to verify the client SSL certificates.\n"
-"						By default, no CA is set and no client certificate check is performed.\n"
-" --ec-curve-name	<curve-name>		Curve name for EC ciphers, if supported by OpenSSL\n"
-"						library (TLS and DTLS). The default value is prime256v1,\n"
-"						if pre-OpenSSL 1.0.2 is used. With OpenSSL 1.0.2+,\n"
-"						an optimal curve will be automatically calculated, if not defined\n"
-"						by this option.\n"
-" --dh566					Use 566 bits predefined DH TLS key. Default size of the predefined key is 1066.\n"
-" --dh2066					Use 2066 bits predefined DH TLS key. Default size of the predefined key is 1066.\n"
-" --dh-file	<dh-file-name>			Use custom DH TLS key, stored in PEM format in the file.\n"
-"						Flags --dh566 and --dh2066 are ignored when the DH key is taken from a file.\n"
-" --no-tlsv1					Do not allow TLSv1/DTLSv1 protocol.\n"
-" --no-tlsv1_1					Do not allow TLSv1.1 protocol.\n"
-" --no-tlsv1_2					Do not allow TLSv1.2/DTLSv1.2 protocol.\n"
-" --no-udp					Do not start UDP client listeners.\n"
-" --no-tcp					Do not start TCP client listeners.\n"
-" --no-tls					Do not start TLS client listeners.\n"
-" --no-dtls					Do not start DTLS client listeners.\n"
-" --no-udp-relay					Do not allow UDP relay endpoints, use only TCP relay option.\n"
-" --no-tcp-relay					Do not allow TCP relay endpoints, use only UDP relay options.\n"
-" -l, --log-file		<filename>		Option to set the full path name of the log file.\n"
-"						By default, the turnserver tries to open a log file in\n"
-"						/var/log/turnserver/, /var/log, /var/tmp, /tmp and . (current) directories\n"
-"						(which open operation succeeds first that file will be used).\n"
-"						With this option you can set the definite log file name.\n"
-"						The special names are \"stdout\" and \"-\" - they will force everything\n"
-"						to the stdout; and \"syslog\" name will force all output to the syslog.\n"
-" --no-stdout-log				Flag to prevent stdout log messages.\n"
-"						By default, all log messages are going to both stdout and to\n"
-"						a log file. With this option everything will be going to the log file only\n"
-"						(unless the log file itself is stdout).\n"
-" --syslog					Output all log information into the system log (syslog), do not use the file output.\n"
-" --simple-log					This flag means that no log file rollover will be used, and the log file\n"
-"						name will be constructed as-is, without PID and date appendage.\n"
-"						This option can be used, for example, together with the logrotate tool.\n"
-" --stale-nonce[=<value>]			Use extra security with nonce value having limited lifetime (default 600 secs).\n"
-" --max-allocate-lifetime	<value>		Set the maximum value for the allocation lifetime. Default to 3600 secs.\n"
-" --channel-lifetime		<value>		Set the lifetime for channel binding, default to 600 secs.\n"
-"						This value MUST not be changed for production purposes.\n"
-" --permission-lifetime		<value>		Set the value for the lifetime of the permission. Default to 300 secs.\n"
-"						This MUST not be changed for production purposes.\n"
-" -S, --stun-only				Option to set standalone STUN operation only, all TURN requests will be ignored.\n"
-"     --no-stun					Option to suppress STUN functionality, only TURN requests will be processed.\n"
-" --alternate-server		<ip:port>	Set the TURN server to redirect the allocate requests (UDP and TCP services).\n"
-"						Multiple alternate-server options can be set for load balancing purposes.\n"
-"						See the docs for more information.\n"
-" --tls-alternate-server	<ip:port>		Set the TURN server to redirect the allocate requests (DTLS and TLS services).\n"
-"						Multiple alternate-server options can be set for load balancing purposes.\n"
-"						See the docs for more information.\n"
-" -C, --rest-api-separator	<SYMBOL>	This is the timestamp/username separator symbol (character) in TURN REST API.\n"
-"						The default value is ':'.\n"
-" --max-allocate-timeout=<seconds>		Max time, in seconds, allowed for full allocation establishment. Default is 60.\n"
-" --allowed-peer-ip=<ip[-ip]> 			Specifies an ip or range of ips that are explicitly allowed to connect to the \n"
-"						turn server. Multiple allowed-peer-ip can be set.\n"
-" --denied-peer-ip=<ip[-ip]> 			Specifies an ip or range of ips that are not allowed to connect to the turn server.\n"
-"						Multiple denied-peer-ip can be set.\n"
-" --pidfile <\"pid-file-name\">			File name to store the pid of the process.\n"
-"						Default is /var/run/turnserver.pid (if superuser account is used) or\n"
-"						/var/tmp/turnserver.pid .\n"
-" --secure-stun					Require authentication of the STUN Binding request.\n"
-"						By default, the clients are allowed anonymous access to the STUN Binding functionality.\n"
-" --proc-user <user-name>			User name to run the turnserver process.\n"
-"						After the initialization, the turnserver process\n"
-"						will make an attempt to change the current user ID to that user.\n"
-" --proc-group <group-name>			Group name to run the turnserver process.\n"
-"						After the initialization, the turnserver process\n"
-"						will make an attempt to change the current group ID to that group.\n"
-" --mobility					Mobility with ICE (MICE) specs support.\n"
-" --no-http					Turn OFF the HTTP-Admin-Interface. By default it is always ON.\n"
-" --no-cli					Turn OFF the CLI support. By default it is always ON.\n"
-" --cli-ip=<IP>					Local system IP address to be used for CLI server endpoint. Default value\n"
-"						is 127.0.0.1.\n"
-" --cli-port=<port>				CLI server port. Default is 5766.\n"
-" --cli-password=<password>			CLI access password. Default is empty (no password).\n"
-"						For the security reasons, it is recommended to use the encrypted\n"
-"						for of the password (see the -P command in the turnadmin utility).\n"
-"						The dollar signs in the encrypted form must be escaped.\n"
-" --server-relay					Server relay. NON-STANDARD AND DANGEROUS OPTION. Only for those applications\n"
-"						when we want to run server applications on the relay endpoints.\n"
-"						This option eliminates the IP permissions check on the packets\n"
-"						incoming to the relay endpoints.\n"
-" --cli-max-output-sessions			Maximum number of output sessions in ps CLI command.\n"
-"						This value can be changed on-the-fly in CLI. The default value is 256.\n"
-" --ne=[1|2|3]					Set network engine type for the process (for internal purposes).\n"
-" -h						Help\n"
-"\n"
-" For more information, see the wiki pages:\n"
-"\n"
-"	https://github.com/coturn/coturn/wiki/\n"
-"\n";
+					  "Options:\n"
+					  " -d, --listening-device	<device-name>		Listener interface device (NOT RECOMMENDED. Optional, Linux only).\n"
+					  " -p, --listening-port		<port>		TURN listener port (Default: 3478).\n"
+					  "						Note: actually, TLS & DTLS sessions can connect to the \"plain\" TCP & UDP port(s), too,\n"
+					  "						if allowed by configuration.\n"
+					  " --tls-listening-port		<port>		TURN listener port for TLS & DTLS listeners\n"
+					  "						(Default: 5349).\n"
+					  "						Note: actually, \"plain\" TCP & UDP sessions can connect to the TLS & DTLS port(s), too,\n"
+					  "						if allowed by configuration. The TURN server\n"
+					  "						\"automatically\" recognizes the type of traffic. Actually, two listening\n"
+					  "						endpoints (the \"plain\" one and the \"tls\" one) are equivalent in terms of\n"
+					  "						functionality; but we keep both endpoints to satisfy the RFC 5766 specs.\n"
+					  "						For secure TCP connections, we currently support SSL version 3 and\n"
+					  "						TLS versions 1.0, 1.1 and 1.2. For secure UDP connections, we support\n"
+					  "						DTLS version 1.\n"
+					  " --alt-listening-port<port>	<port>		Alternative listening port for STUN CHANGE_REQUEST (in RFC 5780 sense, \n"
+					  "                                                or in old RFC 3489 sense, default is \"listening port plus one\").\n"
+					  " --alt-tls-listening-port	<port>		Alternative listening port for TLS and DTLS,\n"
+					  " 						the default is \"TLS/DTLS port plus one\".\n"
+					  " -L, --listening-ip		<ip>		Listener IP address of relay server. Multiple listeners can be specified.\n"
+					  " --aux-server			<ip:port>	Auxiliary STUN/TURN server listening endpoint.\n"
+					  "						Auxiliary servers do not have alternative ports and\n"
+					  "						they do not support RFC 5780 functionality (CHANGE REQUEST).\n"
+					  "						Valid formats are 1.2.3.4:5555 for IPv4 and [1:2::3:4]:5555 for IPv6.\n"
+					  " --udp-self-balance				(recommended for older Linuxes only) Automatically balance UDP traffic\n"
+					  "						over auxiliary servers (if configured).\n"
+					  "						The load balancing is using the ALTERNATE-SERVER mechanism.\n"
+					  "						The TURN client must support 300 ALTERNATE-SERVER response for this functionality.\n"
+					  " -i, --relay-device		<device-name>	Relay interface device for relay sockets (NOT RECOMMENDED. Optional, Linux only).\n"
+					  " -E, --relay-ip		<ip>			Relay address (the local IP address that will be used to relay the\n"
+					  "						packets to the peer).\n"
+					  "						Multiple relay addresses may be used.\n"
+					  "						The same IP(s) can be used as both listening IP(s) and relay IP(s).\n"
+					  "						If no relay IP(s) specified, then the turnserver will apply the default\n"
+					  "						policy: it will decide itself which relay addresses to be used, and it\n"
+					  "						will always be using the client socket IP address as the relay IP address\n"
+					  "						of the TURN session (if the requested relay address family is the same\n"
+					  "						as the family of the client socket).\n"
+					  " -X, --external-ip  <public-ip[/private-ip]>	TURN Server public/private address mapping, if the server is behind NAT.\n"
+					  "						In that situation, if a -X is used in form \"-X ip\" then that ip will be reported\n"
+					  "						as relay IP address of all allocations. This scenario works only in a simple case\n"
+					  "						when one single relay address is be used, and no STUN CHANGE_REQUEST\n"
+					  "						functionality is required.\n"
+					  "						That single relay address must be mapped by NAT to the 'external' IP.\n"
+					  "						For that 'external' IP, NAT must forward ports directly (relayed port 12345\n"
+					  "						must be always mapped to the same 'external' port 12345).\n"
+					  "						In more complex case when more than one IP address is involved,\n"
+					  "						that option must be used several times in the command line, each entry must\n"
+					  "						have form \"-X public-ip/private-ip\", to map all involved addresses.\n"
+					  " --no-loopback-peers				Disallow peers on the loopback addresses (127.x.x.x and ::1).\n"
+					  " --no-multicast-peers				Disallow peers on well-known broadcast addresses (224.0.0.0 and above, and FFXX:*).\n"
+					  " -m, --relay-threads		<number>	Number of relay threads to handle the established connections\n"
+					  "						(in addition to authentication thread and the listener thread).\n"
+					  "						If explicitly set to 0 then application runs in single-threaded mode.\n"
+					  "						If not set then a default OS-dependent optimal algorithm will be employed.\n"
+					  "						The default thread number is the number of CPUs.\n"
+					  "						In older systems (pre-Linux 3.9) the number of UDP relay threads always equals\n"
+					  "						the number of listening endpoints (unless -m 0 is set).\n"
+					  " --min-port			<port>		Lower bound of the UDP port range for relay endpoints allocation.\n"
+					  "						Default value is 49152, according to RFC 5766.\n"
+					  " --max-port			<port>		Upper bound of the UDP port range for relay endpoints allocation.\n"
+					  "						Default value is 65535, according to RFC 5766.\n"
+					  " -v, --verbose					'Moderate' verbose mode.\n"
+					  " -V, --Verbose					Extra verbose mode, very annoying (for debug purposes only).\n"
+					  " -o, --daemon					Start process as daemon (detach from current shell).\n"
+					  " --prod       	 				Production mode: hide the software version.\n"
+					  " -f, --fingerprint				Use fingerprints in the TURN messages.\n"
+					  " -a, --lt-cred-mech				Use the long-term credential mechanism.\n"
+					  " -z, --no-auth					Do not use any credential mechanism, allow anonymous access.\n"
+					  " -u, --user			<user:pwd>	User account, in form 'username:password', for long-term credentials.\n"
+					  "						Cannot be used with TURN REST API.\n"
+					  " -r, --realm			<realm>		The default realm to be used for the users when no explicit\n"
+					  "						origin/realm relationship was found in the database.\n"
+					  "						Must be used with long-term credentials \n"
+					  "						mechanism or with TURN REST API.\n"
+					  " --check-origin-consistency			The flag that sets the origin consistency check:\n"
+					  "						across the session, all requests must have the same\n"
+					  "						main ORIGIN attribute value (if the ORIGIN was\n"
+					  "						initially used by the session).\n"
+					  " -q, --user-quota		<number>	Per-user allocation quota: how many concurrent allocations a user can create.\n"
+					  "						This option can also be set through the database, for a particular realm.\n"
+					  " -Q, --total-quota		<number>	Total allocations quota: global limit on concurrent allocations.\n"
+					  "						This option can also be set through the database, for a particular realm.\n"
+					  " -s, --max-bps			<number>	Default max bytes-per-second bandwidth a TURN session is allowed to handle\n"
+					  "						(input and output network streams are treated separately). Anything above\n"
+					  "						that limit will be dropped or temporary suppressed\n"
+					  "						(within the available buffer limits).\n"
+					  "						This option can also be set through the database, for a particular realm.\n"
+					  " -B, --bps-capacity		<number>	Maximum server capacity.\n"
+					  "						Total bytes-per-second bandwidth the TURN server is allowed to allocate\n"
+					  "						for the sessions, combined (input and output network streams are treated separately).\n"
+					  " -c				<filename>	Configuration file name (default - turnserver.conf).\n"
+					  #if !defined(TURN_NO_SQLITE)
+					  " -b, , --db, --userdb	<filename>		SQLite database file name; default - /var/db/turndb or\n"
+					  "						    /usr/local/var/db/turndb or /var/lib/turn/turndb.\n"
+					  #endif
+					  #if !defined(TURN_NO_PQ)
+					  " -e, --psql-userdb, --sql-userdb <conn-string>	PostgreSQL database connection string, if used (default - empty, no PostreSQL DB used).\n"
+					  "		                                This database can be used for long-term credentials mechanism users,\n"
+					  "		                                and it can store the secret value(s) for secret-based timed authentication in TURN RESP API.\n"
+					  "						See http://www.postgresql.org/docs/8.4/static/libpq-connect.html for 8.x PostgreSQL\n"
+					  "						versions format, see \n"
+					  "						http://www.postgresql.org/docs/9.2/static/libpq-connect.html#LIBPQ-CONNSTRING\n"
+					  "						for 9.x and newer connection string formats.\n"
+					  #endif
+					  #if !defined(TURN_NO_MYSQL)
+					  " -M, --mysql-userdb	<connection-string>	MySQL database connection string, if used (default - empty, no MySQL DB used).\n"
+					  "	                                	This database can be used for long-term credentials mechanism users,\n"
+					  "		                                and it can store the secret value(s) for secret-based timed authentication in TURN RESP API.\n"
+					  "						The connection string my be space-separated list of parameters:\n"
+					  "	        	          		\"host=<ip-addr> dbname=<database-name> user=<database-user> \\\n							password=<database-user-password> port=<db-port> connect_timeout=<seconds> read_timeout=<seconds>\".\n\n"
+					  "						The connection string parameters for the secure communications (SSL):\n"
+					  "						ca, capath, cert, key, cipher\n"
+					  "						(see http://dev.mysql.com/doc/refman/5.1/en/ssl-options.html for the\n"
+					  "						command options description).\n\n"
+					  "	        	          		All connection-string parameters are optional.\n\n"
+					  "--secret-key-file	<filename>		If you want to use password as encrpyted in the mysql connection string MySQL encrypted connection, this is key path.\n"
+					  "						This is the file path which contain secret key of aes encryption while using password encryption.\n"
+					  "						This attribute should be use if allow-encoding-with-aes set to 1.\n"
+					  #endif
+					  #if !defined(TURN_NO_MONGO)
+					  " -J, --mongo-userdb	<connection-string>	MongoDB connection string, if used (default - empty, no MongoDB used).\n"
+					  "	                                	This database can be used for long-term credentials mechanism users,\n"
+					  "		                                and it can store the secret value(s) for secret-based timed authentication in TURN RESP API.\n"
+					  #endif
+					  #if !defined(TURN_NO_HIREDIS)
+					  " -N, --redis-userdb	<connection-string>	Redis user database connection string, if used (default - empty, no Redis DB used).\n"
+					  "	                                	This database can be used for long-term credentials mechanism users,\n"
+					  "		                                and it can store the secret value(s) for secret-based timed authentication in TURN RESP API.\n"
+					  "						The connection string my be space-separated list of parameters:\n"
+					  "	        	          		\"host=<ip-addr> dbname=<db-number> \\\n								password=<database-user-password> port=<db-port> connect_timeout=<seconds>\".\n\n"
+					  "	        	          		All connection-string parameters are optional.\n\n"
+					  " -O, --redis-statsdb	<connection-string>	Redis status and statistics database connection string, if used \n"
+					  "						(default - empty, no Redis stats DB used).\n"
+					  "	                                	This database keeps allocations status information, and it can be also used for publishing\n"
+					  "		                                and delivering traffic and allocation event notifications.\n"
+					  "						The connection string has the same parameters as redis-userdb connection string.\n"
+					  #endif
+					  " --use-auth-secret				TURN REST API flag.\n"
+					  "						Flag that sets a special authorization option that is based upon authentication secret\n"
+					  "						(TURN Server REST API, see TURNServerRESTAPI.pdf). This option is used with timestamp.\n"
+					  " --static-auth-secret		<secret>	'Static' authentication secret value (a string) for TURN REST API only.\n"
+					  "						If not set, then the turn server will try to use the 'dynamic' value\n"
+					  "						in turn_secret table in user database (if present).\n"
+					  "						That database value can be changed on-the-fly\n"
+					  "						by a separate program, so this is why it is 'dynamic'.\n"
+					  "						Multiple shared secrets can be used (both in the database and in the \"static\" fashion).\n"
+					  " --server-name					Server name used for\n"
+					  "						the oAuth authentication purposes.\n"
+					  "						The default value is the realm name.\n"
+					  " --oauth					Support oAuth authentication.\n"
+					  " -n						Do not use configuration file, take all parameters from the command line only.\n"
+					  " --cert			<filename>		Certificate file, PEM format. Same file search rules\n"
+					  "						applied as for the configuration file.\n"
+					  "						If both --no-tls and --no_dtls options\n"
+					  "						are specified, then this parameter is not needed.\n"
+					  " --pkey			<filename>		Private key file, PEM format. Same file search rules\n"
+					  "						applied as for the configuration file.\n"
+					  "						If both --no-tls and --no-dtls options\n"
+					  " --pkey-pwd		<password>		If the private key file is encrypted, then this password to be used.\n"
+					  " --cipher-list	<\"cipher-string\">		Allowed OpenSSL cipher list for TLS/DTLS connections.\n"
+					  "						Default value is \"DEFAULT\".\n"
+					  " --CA-file		<filename>		CA file in OpenSSL format.\n"
+					  "						Forces TURN server to verify the client SSL certificates.\n"
+					  "						By default, no CA is set and no client certificate check is performed.\n"
+					  " --ec-curve-name	<curve-name>		Curve name for EC ciphers, if supported by OpenSSL\n"
+					  "						library (TLS and DTLS). The default value is prime256v1,\n"
+					  "						if pre-OpenSSL 1.0.2 is used. With OpenSSL 1.0.2+,\n"
+					  "						an optimal curve will be automatically calculated, if not defined\n"
+					  "						by this option.\n"
+					  " --dh566					Use 566 bits predefined DH TLS key. Default size of the predefined key is 1066.\n"
+					  " --dh2066					Use 2066 bits predefined DH TLS key. Default size of the predefined key is 1066.\n"
+					  " --dh-file	<dh-file-name>			Use custom DH TLS key, stored in PEM format in the file.\n"
+					  "						Flags --dh566 and --dh2066 are ignored when the DH key is taken from a file.\n"
+					  " --no-tlsv1					Do not allow TLSv1/DTLSv1 protocol.\n"
+					  " --no-tlsv1_1					Do not allow TLSv1.1 protocol.\n"
+					  " --no-tlsv1_2					Do not allow TLSv1.2/DTLSv1.2 protocol.\n"
+					  " --no-udp					Do not start UDP client listeners.\n"
+					  " --no-tcp					Do not start TCP client listeners.\n"
+					  " --no-tls					Do not start TLS client listeners.\n"
+					  " --no-dtls					Do not start DTLS client listeners.\n"
+					  " --no-udp-relay					Do not allow UDP relay endpoints, use only TCP relay option.\n"
+					  " --no-tcp-relay					Do not allow TCP relay endpoints, use only UDP relay options.\n"
+					  " -l, --log-file		<filename>		Option to set the full path name of the log file.\n"
+					  "						By default, the turnserver tries to open a log file in\n"
+					  "						/var/log/turnserver/, /var/log, /var/tmp, /tmp and . (current) directories\n"
+					  "						(which open operation succeeds first that file will be used).\n"
+					  "						With this option you can set the definite log file name.\n"
+					  "						The special names are \"stdout\" and \"-\" - they will force everything\n"
+					  "						to the stdout; and \"syslog\" name will force all output to the syslog.\n"
+					  " --no-stdout-log				Flag to prevent stdout log messages.\n"
+					  "						By default, all log messages are going to both stdout and to\n"
+					  "						a log file. With this option everything will be going to the log file only\n"
+					  "						(unless the log file itself is stdout).\n"
+					  " --syslog					Output all log information into the system log (syslog), do not use the file output.\n"
+					  " --simple-log					This flag means that no log file rollover will be used, and the log file\n"
+					  "						name will be constructed as-is, without PID and date appendage.\n"
+					  "						This option can be used, for example, together with the logrotate tool.\n"
+					  " --stale-nonce[=<value>]			Use extra security with nonce value having limited lifetime (default 600 secs).\n"
+					  " --max-allocate-lifetime	<value>		Set the maximum value for the allocation lifetime. Default to 3600 secs.\n"
+					  " --channel-lifetime		<value>		Set the lifetime for channel binding, default to 600 secs.\n"
+					  "						This value MUST not be changed for production purposes.\n"
+					  " --permission-lifetime		<value>		Set the value for the lifetime of the permission. Default to 300 secs.\n"
+					  "						This MUST not be changed for production purposes.\n"
+					  " -S, --stun-only				Option to set standalone STUN operation only, all TURN requests will be ignored.\n"
+					  "     --no-stun					Option to suppress STUN functionality, only TURN requests will be processed.\n"
+					  " --alternate-server		<ip:port>	Set the TURN server to redirect the allocate requests (UDP and TCP services).\n"
+					  "						Multiple alternate-server options can be set for load balancing purposes.\n"
+					  "						See the docs for more information.\n"
+					  " --tls-alternate-server	<ip:port>		Set the TURN server to redirect the allocate requests (DTLS and TLS services).\n"
+					  "						Multiple alternate-server options can be set for load balancing purposes.\n"
+					  "						See the docs for more information.\n"
+					  " -C, --rest-api-separator	<SYMBOL>	This is the timestamp/username separator symbol (character) in TURN REST API.\n"
+					  "						The default value is ':'.\n"
+					  " --max-allocate-timeout=<seconds>		Max time, in seconds, allowed for full allocation establishment. Default is 60.\n"
+					  " --allowed-peer-ip=<ip[-ip]> 			Specifies an ip or range of ips that are explicitly allowed to connect to the \n"
+					  "						turn server. Multiple allowed-peer-ip can be set.\n"
+					  " --denied-peer-ip=<ip[-ip]> 			Specifies an ip or range of ips that are not allowed to connect to the turn server.\n"
+					  "						Multiple denied-peer-ip can be set.\n"
+					  " --pidfile <\"pid-file-name\">			File name to store the pid of the process.\n"
+					  "						Default is /var/run/turnserver.pid (if superuser account is used) or\n"
+					  "						/var/tmp/turnserver.pid .\n"
+					  " --secure-stun					Require authentication of the STUN Binding request.\n"
+					  "						By default, the clients are allowed anonymous access to the STUN Binding functionality.\n"
+					  " --proc-user <user-name>			User name to run the turnserver process.\n"
+					  "						After the initialization, the turnserver process\n"
+					  "						will make an attempt to change the current user ID to that user.\n"
+					  " --proc-group <group-name>			Group name to run the turnserver process.\n"
+					  "						After the initialization, the turnserver process\n"
+					  "						will make an attempt to change the current group ID to that group.\n"
+					  " --mobility					Mobility with ICE (MICE) specs support.\n"
+					  " --no-http					Turn OFF the HTTP-Admin-Interface. By default it is always ON.\n"
+					  " --no-cli					Turn OFF the CLI support. By default it is always ON.\n"
+					  " --cli-ip=<IP>					Local system IP address to be used for CLI server endpoint. Default value\n"
+					  "						is 127.0.0.1.\n"
+					  " --cli-port=<port>				CLI server port. Default is 5766.\n"
+					  " --cli-password=<password>			CLI access password. Default is empty (no password).\n"
+					  "						For the security reasons, it is recommended to use the encrypted\n"
+					  "						for of the password (see the -P command in the turnadmin utility).\n"
+					  "						The dollar signs in the encrypted form must be escaped.\n"
+					  " --server-relay					Server relay. NON-STANDARD AND DANGEROUS OPTION. Only for those applications\n"
+					  "						when we want to run server applications on the relay endpoints.\n"
+					  "						This option eliminates the IP permissions check on the packets\n"
+					  "						incoming to the relay endpoints.\n"
+					  " --cli-max-output-sessions			Maximum number of output sessions in ps CLI command.\n"
+					  "						This value can be changed on-the-fly in CLI. The default value is 256.\n"
+					  " --ne=[1|2|3]					Set network engine type for the process (for internal purposes).\n"
+					  " -h						Help\n"
+					  "\n"
+					  " For more information, see the wiki pages:\n"
+					  "\n"
+					  "	https://github.com/coturn/coturn/wiki/\n"
+					  "\n";
 
 static char AdminUsage[] = "Usage: turnadmin [command] [options]\n"
-	"\nCommands:\n\n"
-	"	-P, --generate-encrypted-password	Generate and print to the standard\n"
-	"					output an encrypted form of a password\n"
-	"					(for web admin user or CLI). See wiki, README or man\n"
-	"					pages for more detailed description.\n"
-	"	-k, --key			generate long-term credential mechanism key for a user\n"
-	"	-a, --add			add/update a long-term mechanism user\n"
-	"	-A, --add-admin			add/update a web admin user\n"
-	"	-d, --delete			delete a long-term mechanism user\n"
-	"	-D, --delete-admin		delete an admin user\n"
-	"	-l, --list			list all long-term mechanism users\n"
-	"	-L, --list-admin		list all admin users\n"
-	"	-s, --set-secret=<value>	Add shared secret for TURN RESP API\n"
-	"	-S, --show-secret		Show stored shared secrets for TURN REST API\n"
-	"	-X, --delete-secret=<value>	Delete a shared secret\n"
-	"	    --delete-all-secrets	Delete all shared secrets for REST API\n"
-	"	-O, --add-origin		Add origin-to-realm relation.\n"
-	"	-R, --del-origin		Delete origin-to-realm relation.\n"
-	"	-I, --list-origins		List origin-to-realm relations.\n"
-	"	-g, --set-realm-option		Set realm params: max-bps, total-quota, user-quota.\n"
-	"	-G, --list-realm-options	List realm params.\n"
-	"	-E, --generate-encrypted-password-aes	Generate and print to the standard\n"
-	"					output an encrypted form of password with AES-128\n"
-	"\nOptions with mandatory values:\n\n"
-#if !defined(TURN_NO_SQLITE)
-	"	-b, --db, --userdb		SQLite database file, default value is /var/db/turndb or\n"
-	"					  /usr/local/var/db/turndb or /var/lib/turn/turndb.\n"
-#endif
-#if !defined(TURN_NO_PQ)
-	"	-e, --psql-userdb, --sql-userdb	PostgreSQL user database connection string, if PostgreSQL DB is used.\n"
-#endif
-#if !defined(TURN_NO_MYSQL)
-	"	-M, --mysql-userdb		MySQL user database connection string, if MySQL DB is used.\n"
-#endif
-#if !defined(TURN_NO_MONGO)
-	"	-J, --mongo-userdb		MongoDB user database connection string, if MongoDB is used.\n"
-#endif
-#if !defined(TURN_NO_HIREDIS)
-	"	-N, --redis-userdb		Redis user database connection string, if Redis DB is used.\n"
-#endif
-	"	-u, --user			Username\n"
-	"	-r, --realm			Realm\n"
-	"	-p, --password			Password\n"
-	"	-x, --key-path			Generates a 128 bit key into the given path.\n"
-	"	-f, --file-key-path		Contains a 128 bit key in the given path.\n"
-	"	-v, --verify			Verify a given base64 encrypted type password.\n"
-#if !defined(TURN_NO_SQLITE) || !defined(TURN_NO_PQ) || !defined(TURN_NO_MYSQL) || !defined(TURN_NO_MONGO) || !defined(TURN_NO_HIREDIS)
-	"	-o, --origin			Origin\n"
-#endif
-	"	--max-bps			Set value of realm's max-bps parameter.\n"
-	"					Setting to zero value means removal of the option.\n"
-	"	--total-quota			Set value of realm's total-quota parameter.\n"
-	"					Setting to zero value means removal of the option.\n"
-	"	--user-quota			Set value of realm's user-quota parameter.\n"
-	"					Setting to zero value means removal of the option.\n"
-	"	-h, --help			Help\n";
+						   "\nCommands:\n\n"
+						   "	-P, --generate-encrypted-password	Generate and print to the standard\n"
+						   "					output an encrypted form of a password\n"
+						   "					(for web admin user or CLI). See wiki, README or man\n"
+						   "					pages for more detailed description.\n"
+						   "	-k, --key			generate long-term credential mechanism key for a user\n"
+						   "	-a, --add			add/update a long-term mechanism user\n"
+						   "	-A, --add-admin			add/update a web admin user\n"
+						   "	-d, --delete			delete a long-term mechanism user\n"
+						   "	-D, --delete-admin		delete an admin user\n"
+						   "	-l, --list			list all long-term mechanism users\n"
+						   "	-L, --list-admin		list all admin users\n"
+						   "	-s, --set-secret=<value>	Add shared secret for TURN RESP API\n"
+						   "	-S, --show-secret		Show stored shared secrets for TURN REST API\n"
+						   "	-X, --delete-secret=<value>	Delete a shared secret\n"
+						   "	    --delete-all-secrets	Delete all shared secrets for REST API\n"
+						   "	-O, --add-origin		Add origin-to-realm relation.\n"
+						   "	-R, --del-origin		Delete origin-to-realm relation.\n"
+						   "	-I, --list-origins		List origin-to-realm relations.\n"
+						   "	-g, --set-realm-option		Set realm params: max-bps, total-quota, user-quota.\n"
+						   "	-G, --list-realm-options	List realm params.\n"
+						   "	-E, --generate-encrypted-password-aes	Generate and print to the standard\n"
+						   "					output an encrypted form of password with AES-128\n"
+						   "\nOptions with mandatory values:\n\n"
+						   #if !defined(TURN_NO_SQLITE)
+						   "	-b, --db, --userdb		SQLite database file, default value is /var/db/turndb or\n"
+						   "					  /usr/local/var/db/turndb or /var/lib/turn/turndb.\n"
+						   #endif
+						   #if !defined(TURN_NO_PQ)
+						   "	-e, --psql-userdb, --sql-userdb	PostgreSQL user database connection string, if PostgreSQL DB is used.\n"
+						   #endif
+						   #if !defined(TURN_NO_MYSQL)
+						   "	-M, --mysql-userdb		MySQL user database connection string, if MySQL DB is used.\n"
+						   #endif
+						   #if !defined(TURN_NO_MONGO)
+						   "	-J, --mongo-userdb		MongoDB user database connection string, if MongoDB is used.\n"
+						   #endif
+						   #if !defined(TURN_NO_HIREDIS)
+						   "	-N, --redis-userdb		Redis user database connection string, if Redis DB is used.\n"
+						   #endif
+						   "	-u, --user			Username\n"
+						   "	-r, --realm			Realm\n"
+						   "	-p, --password			Password\n"
+						   "	-x, --key-path			Generates a 128 bit key into the given path.\n"
+						   "	-f, --file-key-path		Contains a 128 bit key in the given path.\n"
+						   "	-v, --verify			Verify a given base64 encrypted type password.\n"
+						   #if !defined(TURN_NO_SQLITE) || !defined(TURN_NO_PQ) || !defined(TURN_NO_MYSQL) || !defined(TURN_NO_MONGO) || !defined(TURN_NO_HIREDIS)
+						   "	-o, --origin			Origin\n"
+						   #endif
+						   "	--max-bps			Set value of realm's max-bps parameter.\n"
+						   "					Setting to zero value means removal of the option.\n"
+						   "	--total-quota			Set value of realm's total-quota parameter.\n"
+						   "					Setting to zero value means removal of the option.\n"
+						   "	--user-quota			Set value of realm's user-quota parameter.\n"
+						   "					Setting to zero value means removal of the option.\n"
+						   "	-h, --help			Help\n";
 
 #define OPTIONS "c:d:p:L:E:X:i:m:l:r:u:b:B:e:M:J:N:O:q:Q:s:C:vVofhznaAS"
 
@@ -767,16 +763,15 @@ enum EXTRA_OPTS {
 	OAUTH_OPT,
 	PROD_OPT,
 	NO_HTTP_OPT,
-	SECRET_KEY_OPT,
-	ALLOW_ENCODING_OPT
+	SECRET_KEY_OPT
 };
 
 struct myoption {
-        const char *name;     /* name of long option */
-        int has_arg;    /* whether option takes an argument */
-        int *flag;      /* if not NULL, set *flag to val when option found */
-        int val;        /* if flag is not NULL, value to set *flag to. */
-                        /* if flag is NULL, return value */
+	const char *name;     /* name of long option */
+	int has_arg;    /* whether option takes an argument */
+	int *flag;      /* if not NULL, set *flag to val when option found */
+	int val;        /* if flag is not NULL, value to set *flag to. */
+	/* if flag is NULL, return value */
 };
 
 struct uoptions {
@@ -787,159 +782,158 @@ struct uoptions {
 };
 
 static const struct myoption long_options[] = {
-				{ "listening-device", required_argument, NULL, 'd' },
-				{ "listening-port", required_argument, NULL, 'p' },
-				{ "tls-listening-port", required_argument, NULL, TLS_PORT_OPT },
-				{ "alt-listening-port", required_argument, NULL, ALT_PORT_OPT },
-				{ "alt-tls-listening-port", required_argument, NULL, ALT_TLS_PORT_OPT },
-				{ "listening-ip", required_argument, NULL, 'L' },
-				{ "relay-device", required_argument, NULL, 'i' },
-				{ "relay-ip", required_argument, NULL, 'E' },
-				{ "external-ip", required_argument, NULL, 'X' },
-				{ "relay-threads", required_argument, NULL, 'm' },
-				{ "min-port", required_argument, NULL, MIN_PORT_OPT },
-				{ "max-port", required_argument, NULL, MAX_PORT_OPT },
-				{ "lt-cred-mech", optional_argument, NULL, 'a' },
-				{ "no-auth", optional_argument, NULL, 'z' },
-				{ "user", required_argument, NULL, 'u' },
-				{ "userdb", required_argument, NULL, 'b' },
-				{ "db", required_argument, NULL, 'b' },
+		{ "listening-device", required_argument, NULL, 'd' },
+		{ "listening-port", required_argument, NULL, 'p' },
+		{ "tls-listening-port", required_argument, NULL, TLS_PORT_OPT },
+		{ "alt-listening-port", required_argument, NULL, ALT_PORT_OPT },
+		{ "alt-tls-listening-port", required_argument, NULL, ALT_TLS_PORT_OPT },
+		{ "listening-ip", required_argument, NULL, 'L' },
+		{ "relay-device", required_argument, NULL, 'i' },
+		{ "relay-ip", required_argument, NULL, 'E' },
+		{ "external-ip", required_argument, NULL, 'X' },
+		{ "relay-threads", required_argument, NULL, 'm' },
+		{ "min-port", required_argument, NULL, MIN_PORT_OPT },
+		{ "max-port", required_argument, NULL, MAX_PORT_OPT },
+		{ "lt-cred-mech", optional_argument, NULL, 'a' },
+		{ "no-auth", optional_argument, NULL, 'z' },
+		{ "user", required_argument, NULL, 'u' },
+		{ "userdb", required_argument, NULL, 'b' },
+		{ "db", required_argument, NULL, 'b' },
 #if !defined(TURN_NO_PQ)
-				{ "psql-userdb", required_argument, NULL, 'e' },
-				{ "sql-userdb", required_argument, NULL, 'e' },
+		{ "psql-userdb", required_argument, NULL, 'e' },
+		{ "sql-userdb", required_argument, NULL, 'e' },
 #endif
 #if !defined(TURN_NO_MYSQL)
-				{ "mysql-userdb", required_argument, NULL, 'M' },
+		{ "mysql-userdb", required_argument, NULL, 'M' },
 #endif
 #if !defined(TURN_NO_MONGO)
-				{ "mongo-userdb", required_argument, NULL, 'J' },
+		{ "mongo-userdb", required_argument, NULL, 'J' },
 #endif
 #if !defined(TURN_NO_HIREDIS)
-				{ "redis-userdb", required_argument, NULL, 'N' },
-				{ "redis-statsdb", required_argument, NULL, 'O' },
+		{ "redis-userdb", required_argument, NULL, 'N' },
+		{ "redis-statsdb", required_argument, NULL, 'O' },
 #endif
-				{ "use-auth-secret", optional_argument, NULL, AUTH_SECRET_OPT },
-				{ "static-auth-secret", required_argument, NULL, STATIC_AUTH_SECRET_VAL_OPT },
+		{ "use-auth-secret", optional_argument, NULL, AUTH_SECRET_OPT },
+		{ "static-auth-secret", required_argument, NULL, STATIC_AUTH_SECRET_VAL_OPT },
 /* deprecated: */		{ "secret-ts-exp-time", optional_argument, NULL, AUTH_SECRET_TS_EXP },
-				{ "realm", required_argument, NULL, 'r' },
-				{ "server-name", required_argument, NULL, SERVER_NAME_OPT },
-				{ "oauth", optional_argument, NULL, OAUTH_OPT },
-				{ "user-quota", required_argument, NULL, 'q' },
-				{ "total-quota", required_argument, NULL, 'Q' },
-				{ "max-bps", required_argument, NULL, 's' },
-				{ "bps-capacity", required_argument, NULL, 'B' },
-				{ "verbose", optional_argument, NULL, 'v' },
-				{ "Verbose", optional_argument, NULL, 'V' },
-				{ "daemon", optional_argument, NULL, 'o' },
-				{ "prod", optional_argument, NULL, PROD_OPT },
-				{ "fingerprint", optional_argument, NULL, 'f' },
-				{ "check-origin-consistency", optional_argument, NULL, CHECK_ORIGIN_CONSISTENCY_OPT },
-				{ "no-udp", optional_argument, NULL, NO_UDP_OPT },
-				{ "no-tcp", optional_argument, NULL, NO_TCP_OPT },
-				{ "no-tls", optional_argument, NULL, NO_TLS_OPT },
-				{ "no-dtls", optional_argument, NULL, NO_DTLS_OPT },
-				{ "no-udp-relay", optional_argument, NULL, NO_UDP_RELAY_OPT },
-				{ "no-tcp-relay", optional_argument, NULL, NO_TCP_RELAY_OPT },
-				{ "stale-nonce", optional_argument, NULL, STALE_NONCE_OPT },
-				{ "max-allocate-lifetime", optional_argument, NULL, MAX_ALLOCATE_LIFETIME_OPT },
-				{ "channel-lifetime", optional_argument, NULL, CHANNEL_LIFETIME_OPT },
-				{ "permission-lifetime", optional_argument, NULL, PERMISSION_LIFETIME_OPT },
-				{ "stun-only", optional_argument, NULL, 'S' },
-				{ "no-stun", optional_argument, NULL, NO_STUN_OPT },
-				{ "cert", required_argument, NULL, CERT_FILE_OPT },
-				{ "pkey", required_argument, NULL, PKEY_FILE_OPT },
-				{ "pkey-pwd", required_argument, NULL, PKEY_PWD_OPT },
-				{ "log-file", required_argument, NULL, 'l' },
-				{ "no-stdout-log", optional_argument, NULL, NO_STDOUT_LOG_OPT },
-				{ "syslog", optional_argument, NULL, SYSLOG_OPT },
-				{ "simple-log", optional_argument, NULL, SIMPLE_LOG_OPT },
-				{ "aux-server", required_argument, NULL, AUX_SERVER_OPT },
-				{ "udp-self-balance", optional_argument, NULL, UDP_SELF_BALANCE_OPT },
-				{ "alternate-server", required_argument, NULL, ALTERNATE_SERVER_OPT },
-				{ "tls-alternate-server", required_argument, NULL, TLS_ALTERNATE_SERVER_OPT },
-				{ "rest-api-separator", required_argument, NULL, 'C' },
-				{ "max-allocate-timeout", required_argument, NULL, MAX_ALLOCATE_TIMEOUT_OPT },
-				{ "no-multicast-peers", optional_argument, NULL, NO_MULTICAST_PEERS_OPT },
-				{ "no-loopback-peers", optional_argument, NULL, NO_LOOPBACK_PEERS_OPT },
-				{ "allowed-peer-ip", required_argument, NULL, ALLOWED_PEER_IPS },
-				{ "denied-peer-ip", required_argument, NULL, DENIED_PEER_IPS },
-				{ "cipher-list", required_argument, NULL, CIPHER_LIST_OPT },
-				{ "pidfile", required_argument, NULL, PIDFILE_OPT },
-				{ "secure-stun", optional_argument, NULL, SECURE_STUN_OPT },
-				{ "CA-file", required_argument, NULL, CA_FILE_OPT },
-				{ "dh-file", required_argument, NULL, DH_FILE_OPT },
-				{ "proc-user", required_argument, NULL, PROC_USER_OPT },
-				{ "proc-group", required_argument, NULL, PROC_GROUP_OPT },
-				{ "mobility", optional_argument, NULL, MOBILITY_OPT },
-				{ "no-cli", optional_argument, NULL, NO_CLI_OPT },
-				{ "cli-ip", required_argument, NULL, CLI_IP_OPT },
-				{ "cli-port", required_argument, NULL, CLI_PORT_OPT },
-				{ "cli-password", required_argument, NULL, CLI_PASSWORD_OPT },
-				{ "no-http", optional_argument, NULL, NO_HTTP_OPT },
-				{ "server-relay", optional_argument, NULL, SERVER_RELAY_OPT },
-				{ "cli-max-output-sessions", required_argument, NULL, CLI_MAX_SESSIONS_OPT },
-				{ "ec-curve-name", required_argument, NULL, EC_CURVE_NAME_OPT },
-				{ "dh566", optional_argument, NULL, DH566_OPT },
-				{ "dh2066", optional_argument, NULL, DH2066_OPT },
-				{ "ne", required_argument, NULL, NE_TYPE_OPT },
-				{ "no-sslv2", optional_argument, NULL, NO_SSLV2_OPT }, /* deprecated */
-				{ "no-sslv3", optional_argument, NULL, NO_SSLV3_OPT }, /* deprecated */
-				{ "no-tlsv1", optional_argument, NULL, NO_TLSV1_OPT },
-				{ "no-tlsv1_1", optional_argument, NULL, NO_TLSV1_1_OPT },
-				{ "no-tlsv1_2", optional_argument, NULL, NO_TLSV1_2_OPT },
-				{ "secret-key-file", required_argument, NULL, SECRET_KEY_OPT },
-				{ "allow-encoding-with-aes", required_argument, NULL, ALLOW_ENCODING_OPT},
-				{ NULL, no_argument, NULL, 0 }
+		{ "realm", required_argument, NULL, 'r' },
+		{ "server-name", required_argument, NULL, SERVER_NAME_OPT },
+		{ "oauth", optional_argument, NULL, OAUTH_OPT },
+		{ "user-quota", required_argument, NULL, 'q' },
+		{ "total-quota", required_argument, NULL, 'Q' },
+		{ "max-bps", required_argument, NULL, 's' },
+		{ "bps-capacity", required_argument, NULL, 'B' },
+		{ "verbose", optional_argument, NULL, 'v' },
+		{ "Verbose", optional_argument, NULL, 'V' },
+		{ "daemon", optional_argument, NULL, 'o' },
+		{ "prod", optional_argument, NULL, PROD_OPT },
+		{ "fingerprint", optional_argument, NULL, 'f' },
+		{ "check-origin-consistency", optional_argument, NULL, CHECK_ORIGIN_CONSISTENCY_OPT },
+		{ "no-udp", optional_argument, NULL, NO_UDP_OPT },
+		{ "no-tcp", optional_argument, NULL, NO_TCP_OPT },
+		{ "no-tls", optional_argument, NULL, NO_TLS_OPT },
+		{ "no-dtls", optional_argument, NULL, NO_DTLS_OPT },
+		{ "no-udp-relay", optional_argument, NULL, NO_UDP_RELAY_OPT },
+		{ "no-tcp-relay", optional_argument, NULL, NO_TCP_RELAY_OPT },
+		{ "stale-nonce", optional_argument, NULL, STALE_NONCE_OPT },
+		{ "max-allocate-lifetime", optional_argument, NULL, MAX_ALLOCATE_LIFETIME_OPT },
+		{ "channel-lifetime", optional_argument, NULL, CHANNEL_LIFETIME_OPT },
+		{ "permission-lifetime", optional_argument, NULL, PERMISSION_LIFETIME_OPT },
+		{ "stun-only", optional_argument, NULL, 'S' },
+		{ "no-stun", optional_argument, NULL, NO_STUN_OPT },
+		{ "cert", required_argument, NULL, CERT_FILE_OPT },
+		{ "pkey", required_argument, NULL, PKEY_FILE_OPT },
+		{ "pkey-pwd", required_argument, NULL, PKEY_PWD_OPT },
+		{ "log-file", required_argument, NULL, 'l' },
+		{ "no-stdout-log", optional_argument, NULL, NO_STDOUT_LOG_OPT },
+		{ "syslog", optional_argument, NULL, SYSLOG_OPT },
+		{ "simple-log", optional_argument, NULL, SIMPLE_LOG_OPT },
+		{ "aux-server", required_argument, NULL, AUX_SERVER_OPT },
+		{ "udp-self-balance", optional_argument, NULL, UDP_SELF_BALANCE_OPT },
+		{ "alternate-server", required_argument, NULL, ALTERNATE_SERVER_OPT },
+		{ "tls-alternate-server", required_argument, NULL, TLS_ALTERNATE_SERVER_OPT },
+		{ "rest-api-separator", required_argument, NULL, 'C' },
+		{ "max-allocate-timeout", required_argument, NULL, MAX_ALLOCATE_TIMEOUT_OPT },
+		{ "no-multicast-peers", optional_argument, NULL, NO_MULTICAST_PEERS_OPT },
+		{ "no-loopback-peers", optional_argument, NULL, NO_LOOPBACK_PEERS_OPT },
+		{ "allowed-peer-ip", required_argument, NULL, ALLOWED_PEER_IPS },
+		{ "denied-peer-ip", required_argument, NULL, DENIED_PEER_IPS },
+		{ "cipher-list", required_argument, NULL, CIPHER_LIST_OPT },
+		{ "pidfile", required_argument, NULL, PIDFILE_OPT },
+		{ "secure-stun", optional_argument, NULL, SECURE_STUN_OPT },
+		{ "CA-file", required_argument, NULL, CA_FILE_OPT },
+		{ "dh-file", required_argument, NULL, DH_FILE_OPT },
+		{ "proc-user", required_argument, NULL, PROC_USER_OPT },
+		{ "proc-group", required_argument, NULL, PROC_GROUP_OPT },
+		{ "mobility", optional_argument, NULL, MOBILITY_OPT },
+		{ "no-cli", optional_argument, NULL, NO_CLI_OPT },
+		{ "cli-ip", required_argument, NULL, CLI_IP_OPT },
+		{ "cli-port", required_argument, NULL, CLI_PORT_OPT },
+		{ "cli-password", required_argument, NULL, CLI_PASSWORD_OPT },
+		{ "no-http", optional_argument, NULL, NO_HTTP_OPT },
+		{ "server-relay", optional_argument, NULL, SERVER_RELAY_OPT },
+		{ "cli-max-output-sessions", required_argument, NULL, CLI_MAX_SESSIONS_OPT },
+		{ "ec-curve-name", required_argument, NULL, EC_CURVE_NAME_OPT },
+		{ "dh566", optional_argument, NULL, DH566_OPT },
+		{ "dh2066", optional_argument, NULL, DH2066_OPT },
+		{ "ne", required_argument, NULL, NE_TYPE_OPT },
+		{ "no-sslv2", optional_argument, NULL, NO_SSLV2_OPT }, /* deprecated */
+		{ "no-sslv3", optional_argument, NULL, NO_SSLV3_OPT }, /* deprecated */
+		{ "no-tlsv1", optional_argument, NULL, NO_TLSV1_OPT },
+		{ "no-tlsv1_1", optional_argument, NULL, NO_TLSV1_1_OPT },
+		{ "no-tlsv1_2", optional_argument, NULL, NO_TLSV1_2_OPT },
+		{ "secret-key-file", required_argument, NULL, SECRET_KEY_OPT },
+		{ NULL, no_argument, NULL, 0 }
 };
 
 static const struct myoption admin_long_options[] = {
-				{"generate-encrypted-password", no_argument, NULL, 'P' },
-				{"generate-encrypted-password-aes", no_argument, NULL, 'E'},
-				{ "key", no_argument, NULL, 'k' },
-				{ "add", no_argument, NULL, 'a' },
-				{ "delete", no_argument, NULL, 'd' },
-				{ "list", no_argument, NULL, 'l' },
-				{ "list-admin", no_argument, NULL, 'L' },
-				{ "set-secret", required_argument, NULL, 's' },
-				{ "show-secret", no_argument, NULL, 'S' },
-				{ "delete-secret", required_argument, NULL, 'X' },
-				{ "delete-all-secrets", no_argument, NULL, DEL_ALL_AUTH_SECRETS_OPT },
-				{ "add-admin", no_argument, NULL, 'A' },
-				{ "delete-admin", no_argument, NULL, 'D' },
+		{"generate-encrypted-password", no_argument, NULL, 'P' },
+		{"generate-encrypted-password-aes", no_argument, NULL, 'E'},
+		{ "key", no_argument, NULL, 'k' },
+		{ "add", no_argument, NULL, 'a' },
+		{ "delete", no_argument, NULL, 'd' },
+		{ "list", no_argument, NULL, 'l' },
+		{ "list-admin", no_argument, NULL, 'L' },
+		{ "set-secret", required_argument, NULL, 's' },
+		{ "show-secret", no_argument, NULL, 'S' },
+		{ "delete-secret", required_argument, NULL, 'X' },
+		{ "delete-all-secrets", no_argument, NULL, DEL_ALL_AUTH_SECRETS_OPT },
+		{ "add-admin", no_argument, NULL, 'A' },
+		{ "delete-admin", no_argument, NULL, 'D' },
 #if !defined(TURN_NO_SQLITE)
-				{ "userdb", required_argument, NULL, 'b' },
-				{ "db", required_argument, NULL, 'b' },
+		{ "userdb", required_argument, NULL, 'b' },
+		{ "db", required_argument, NULL, 'b' },
 #endif
 #if !defined(TURN_NO_PQ)
-				{ "psql-userdb", required_argument, NULL, 'e' },
-				{ "sql-userdb", required_argument, NULL, 'e' },
+		{ "psql-userdb", required_argument, NULL, 'e' },
+		{ "sql-userdb", required_argument, NULL, 'e' },
 #endif
 #if !defined(TURN_NO_MYSQL)
-				{ "mysql-userdb", required_argument, NULL, 'M' },
+		{ "mysql-userdb", required_argument, NULL, 'M' },
 #endif
 #if !defined(TURN_NO_MONGO)
-				{ "mongo-userdb", required_argument, NULL, 'J' },
+		{ "mongo-userdb", required_argument, NULL, 'J' },
 #endif
 #if !defined(TURN_NO_HIREDIS)
-				{ "redis-userdb", required_argument, NULL, 'N' },
+		{ "redis-userdb", required_argument, NULL, 'N' },
 #endif
-				{ "user", required_argument, NULL, 'u' },
-				{ "realm", required_argument, NULL, 'r' },
-				{ "password", required_argument, NULL, 'p' },
-				{ "file-key-path", required_argument, NULL, 'f' },
-				{ "verify", required_argument, NULL, 'v' },
-				{ "key-path", required_argument, NULL, 'x'},
-				{ "add-origin", no_argument, NULL, 'O' },
-				{ "del-origin", no_argument, NULL, 'R' },
-				{ "list-origins", required_argument, NULL, 'I' },
-				{ "origin", required_argument, NULL, 'o' },
-				{ "set-realm-option", no_argument, NULL, 'g' },
-				{ "list-realm-option", no_argument, NULL, 'G' },
-				{ "user-quota", required_argument, NULL, ADMIN_USER_QUOTA_OPT },
-				{ "total-quota", required_argument, NULL, ADMIN_TOTAL_QUOTA_OPT },
-				{ "max-bps", required_argument, NULL, ADMIN_MAX_BPS_OPT },
-				{ "help", no_argument, NULL, 'h' },
-				{ NULL, no_argument, NULL, 0 }
+		{ "user", required_argument, NULL, 'u' },
+		{ "realm", required_argument, NULL, 'r' },
+		{ "password", required_argument, NULL, 'p' },
+		{ "file-key-path", required_argument, NULL, 'f' },
+		{ "verify", required_argument, NULL, 'v' },
+		{ "key-path", required_argument, NULL, 'x'},
+		{ "add-origin", no_argument, NULL, 'O' },
+		{ "del-origin", no_argument, NULL, 'R' },
+		{ "list-origins", required_argument, NULL, 'I' },
+		{ "origin", required_argument, NULL, 'o' },
+		{ "set-realm-option", no_argument, NULL, 'g' },
+		{ "list-realm-option", no_argument, NULL, 'G' },
+		{ "user-quota", required_argument, NULL, ADMIN_USER_QUOTA_OPT },
+		{ "total-quota", required_argument, NULL, ADMIN_TOTAL_QUOTA_OPT },
+		{ "max-bps", required_argument, NULL, ADMIN_MAX_BPS_OPT },
+		{ "help", no_argument, NULL, 'h' },
+		{ NULL, no_argument, NULL, 0 }
 };
 
 
@@ -969,27 +963,27 @@ unsigned char *base64encode (const void *b64_encode_this, int encode_this_many_b
 }
 void encrypt_aes_128(unsigned  char* in, const unsigned char* mykey){
 
-    int j=0,k=0;
-    int totalSize=0;
+	int j=0,k=0;
+	int totalSize=0;
 	AES_KEY key;
 	unsigned char iv[8] = {0}; //changed
 	unsigned char out[1024]; //changed
 	AES_set_encrypt_key(mykey, 128, &key);
 	char total[256];
-    int size=0;
-    init_ctr(&state, iv);
+	int size=0;
+	init_ctr(&state, iv);
 
 #if OPENSSL_VERSION_NUMBER >= 0x10100000L
-    CRYPTO_ctr128_encrypt(in, out, strlen((char*)in), &key, state.ivec, state.ecount, &state.num, (block128_f)AES_encrypt);
+	CRYPTO_ctr128_encrypt(in, out, strlen((char*)in), &key, state.ivec, state.ecount, &state.num, (block128_f)AES_encrypt);
 #else
-    AES_ctr128_encrypt(in, out, strlen((char*)in), &key, state.ivec, state.ecount, &state.num);
+	AES_ctr128_encrypt(in, out, strlen((char*)in), &key, state.ivec, state.ecount, &state.num);
 #endif
 
-    totalSize += strlen((char*)in);
-    size = strlen((char*)in);
-    for (j = 0;  j< size; j++) {
-        total[k++]=out[j];
-    }
+	totalSize += strlen((char*)in);
+	size = strlen((char*)in);
+	for (j = 0;  j< size; j++) {
+		total[k++]=out[j];
+	}
 
 	unsigned char *base64_encoded = base64encode(total, totalSize);
 	printf("%s\n",base64_encoded);
@@ -1044,38 +1038,38 @@ unsigned char *base64decode (const void *b64_decode_this, int decode_this_many_b
 	return base64_decoded;        //Returns base-64 decoded data with trailing null terminator.
 }
 int decodedTextSize(char *input){
-    int i=0;
-    int result=0,padding=0;
-    int size=strlen(input);
-    for (i = 0; i < size; ++i) {
-        if(input[i]=='='){
-            padding++;
-        }
-    }
-    result=(strlen(input)/4*3)-padding;
-    return result;
+	int i=0;
+	int result=0,padding=0;
+	int size=strlen(input);
+	for (i = 0; i < size; ++i) {
+		if(input[i]=='='){
+			padding++;
+		}
+	}
+	result=(strlen(input)/4*3)-padding;
+	return result;
 }
 void decrypt_aes_128(char* in, const unsigned char* mykey){
 
-    unsigned char iv[8] = {0};
-    AES_KEY key;
-    unsigned char outdata[256];
-    AES_set_encrypt_key(mykey, 128, &key);
-    int newTotalSize=decodedTextSize(in);
-    int bytes_to_decode = strlen(in);
-    unsigned char *encryptedText = base64decode(in, bytes_to_decode);
-    char last[1024]="";
-    init_ctr(&state, iv);
-    memset(outdata,'\0', sizeof(outdata));
+	unsigned char iv[8] = {0};
+	AES_KEY key;
+	unsigned char outdata[256];
+	AES_set_encrypt_key(mykey, 128, &key);
+	int newTotalSize=decodedTextSize(in);
+	int bytes_to_decode = strlen(in);
+	unsigned char *encryptedText = base64decode(in, bytes_to_decode);
+	char last[1024]="";
+	init_ctr(&state, iv);
+	memset(outdata,'\0', sizeof(outdata));
 
 #if OPENSSL_VERSION_NUMBER >= 0x10100000L
-    CRYPTO_ctr128_encrypt(encryptedText,outdata,newTotalSize,&key, state.ivec, state.ecount, &state.num, (block128_f)AES_encrypt);
+	CRYPTO_ctr128_encrypt(encryptedText,outdata,newTotalSize,&key, state.ivec, state.ecount, &state.num, (block128_f)AES_encrypt);
 #else
-    AES_ctr128_encrypt(encryptedText, outdata, newTotalSize, &key, state.ivec, state.ecount, &state.num);
+	AES_ctr128_encrypt(encryptedText, outdata, newTotalSize, &key, state.ivec, state.ecount, &state.num);
 #endif
 
-    strcat(last,(char*)outdata);
-    printf("%s\n",last);
+	strcat(last,(char*)outdata);
+	printf("%s\n",last);
 }
 
 static int get_int_value(const char* s, int default_value)
@@ -1099,114 +1093,114 @@ static int get_bool_value(const char* s)
 
 static void set_option(int c, char *value)
 {
-  if(value && value[0]=='=') {
-    TURN_LOG_FUNC(TURN_LOG_LEVEL_WARNING, "WARNING: option -%c is possibly used incorrectly. The short form of the option must be used as this: -%c <value>, no \'equals\' sign may be used, that sign is used only with long form options (like --user=<username>).\n",(char)c,(char)c);
-  }
-
-  switch (c) {
-  case SERVER_NAME_OPT:
-	  STRCPY(turn_params.oauth_server_name,value);
-	  break;
-  case OAUTH_OPT:
-	  if(!ENC_ALG_NUM) {
-		  TURN_LOG_FUNC(TURN_LOG_LEVEL_WARNING, "WARNING: option --oauth is not supported; ignored.\n");
-	  } else {
-		  turn_params.oauth = get_bool_value(value);
-	  }
-	  break;
-  case NO_SSLV2_OPT:
-    //deprecated
-	  break;
-  case NO_SSLV3_OPT:
-	  //deprecated
-	  break;
-  case NO_TLSV1_OPT:
-	  turn_params.no_tlsv1 = get_bool_value(value);
-	  break;
-  case NO_TLSV1_1_OPT:
-	  turn_params.no_tlsv1_1 = get_bool_value(value);
-	  break;
-  case NO_TLSV1_2_OPT:
-	  turn_params.no_tlsv1_2 = get_bool_value(value);
-	  break;
-  case NE_TYPE_OPT:
-  {
-	  int ne = atoi(value);
-	  if((ne<(int)NEV_MIN)||(ne>(int)NEV_MAX)) {
-		  TURN_LOG_FUNC(TURN_LOG_LEVEL_ERROR, "ERROR: wrong version of the network engine: %d\n",ne);
-	  }
-	  turn_params.net_engine_version = (NET_ENG_VERSION)ne;
-  }
-	  break;
-  case DH566_OPT:
-	  if(get_bool_value(value))
-		  turn_params.dh_key_size = DH_566;
-	  break;
-  case DH2066_OPT:
-	  if(get_bool_value(value))
-		  turn_params.dh_key_size = DH_2066;
-	  break;
-  case EC_CURVE_NAME_OPT:
-	  STRCPY(turn_params.ec_curve_name,value);
-	  break;
-  case CLI_MAX_SESSIONS_OPT:
-	  cli_max_output_sessions = atoi(value);
-	  break;
-  case SERVER_RELAY_OPT:
-	  turn_params.server_relay = get_bool_value(value);
-	  break;
-  case MOBILITY_OPT:
-	  turn_params.mobility = get_bool_value(value);
-	  break;
-  case NO_CLI_OPT:
-	  use_cli = !get_bool_value(value);
-	  break;
-  case NO_HTTP_OPT:
-	  use_http = !get_bool_value(value);
-	  break;
-  case CLI_IP_OPT:
-	  if(make_ioa_addr((const u08bits*)value,0,&cli_addr)<0) {
-		  TURN_LOG_FUNC(TURN_LOG_LEVEL_ERROR,"Cannot set cli address: %s\n",value);
-	  } else{
-		  cli_addr_set = 1;
-	  }
-	  break;
-  case CLI_PORT_OPT:
-	  cli_port = atoi(value);
-	  break;
-  case CLI_PASSWORD_OPT:
-	  STRCPY(cli_password,value);
-	  break;
-  case PROC_USER_OPT: {
-	  struct passwd* pwd = getpwnam(value);
-	  if(!pwd) {
-		  TURN_LOG_FUNC(TURN_LOG_LEVEL_ERROR, "Unknown user name: %s\n",value);
-		  exit(-1);
-	  } else {
-		  procuserid = pwd->pw_uid;
-		  procuserid_set = 1;
-		  STRCPY(procusername,value);
-	  }
-  }
-  break;
-	case PROC_GROUP_OPT: {
-		struct group* gr = getgrnam(value);
-		if(!gr) {
-			TURN_LOG_FUNC(TURN_LOG_LEVEL_ERROR, "Unknown group name: %s\n",value);
-			exit(-1);
-		} else {
-			procgroupid = gr->gr_gid;
-			procgroupid_set = 1;
-			STRCPY(procgroupname,value);
-		}
+	if(value && value[0]=='=') {
+		TURN_LOG_FUNC(TURN_LOG_LEVEL_WARNING, "WARNING: option -%c is possibly used incorrectly. The short form of the option must be used as this: -%c <value>, no \'equals\' sign may be used, that sign is used only with long form options (like --user=<username>).\n",(char)c,(char)c);
 	}
-	break;
-	case 'i':
-		STRCPY(turn_params.relay_ifname, value);
-		break;
-	case 'm':
+
+	switch (c) {
+		case SERVER_NAME_OPT:
+			STRCPY(turn_params.oauth_server_name,value);
+			break;
+		case OAUTH_OPT:
+			if(!ENC_ALG_NUM) {
+				TURN_LOG_FUNC(TURN_LOG_LEVEL_WARNING, "WARNING: option --oauth is not supported; ignored.\n");
+			} else {
+				turn_params.oauth = get_bool_value(value);
+			}
+			break;
+		case NO_SSLV2_OPT:
+			//deprecated
+			break;
+		case NO_SSLV3_OPT:
+			//deprecated
+			break;
+		case NO_TLSV1_OPT:
+			turn_params.no_tlsv1 = get_bool_value(value);
+			break;
+		case NO_TLSV1_1_OPT:
+			turn_params.no_tlsv1_1 = get_bool_value(value);
+			break;
+		case NO_TLSV1_2_OPT:
+			turn_params.no_tlsv1_2 = get_bool_value(value);
+			break;
+		case NE_TYPE_OPT:
+		{
+			int ne = atoi(value);
+			if((ne<(int)NEV_MIN)||(ne>(int)NEV_MAX)) {
+				TURN_LOG_FUNC(TURN_LOG_LEVEL_ERROR, "ERROR: wrong version of the network engine: %d\n",ne);
+			}
+			turn_params.net_engine_version = (NET_ENG_VERSION)ne;
+		}
+			break;
+		case DH566_OPT:
+			if(get_bool_value(value))
+				turn_params.dh_key_size = DH_566;
+			break;
+		case DH2066_OPT:
+			if(get_bool_value(value))
+				turn_params.dh_key_size = DH_2066;
+			break;
+		case EC_CURVE_NAME_OPT:
+			STRCPY(turn_params.ec_curve_name,value);
+			break;
+		case CLI_MAX_SESSIONS_OPT:
+			cli_max_output_sessions = atoi(value);
+			break;
+		case SERVER_RELAY_OPT:
+			turn_params.server_relay = get_bool_value(value);
+			break;
+		case MOBILITY_OPT:
+			turn_params.mobility = get_bool_value(value);
+			break;
+		case NO_CLI_OPT:
+			use_cli = !get_bool_value(value);
+			break;
+		case NO_HTTP_OPT:
+			use_http = !get_bool_value(value);
+			break;
+		case CLI_IP_OPT:
+			if(make_ioa_addr((const u08bits*)value,0,&cli_addr)<0) {
+				TURN_LOG_FUNC(TURN_LOG_LEVEL_ERROR,"Cannot set cli address: %s\n",value);
+			} else{
+				cli_addr_set = 1;
+			}
+			break;
+		case CLI_PORT_OPT:
+			cli_port = atoi(value);
+			break;
+		case CLI_PASSWORD_OPT:
+			STRCPY(cli_password,value);
+			break;
+		case PROC_USER_OPT: {
+			struct passwd* pwd = getpwnam(value);
+			if(!pwd) {
+				TURN_LOG_FUNC(TURN_LOG_LEVEL_ERROR, "Unknown user name: %s\n",value);
+				exit(-1);
+			} else {
+				procuserid = pwd->pw_uid;
+				procuserid_set = 1;
+				STRCPY(procusername,value);
+			}
+		}
+			break;
+		case PROC_GROUP_OPT: {
+			struct group* gr = getgrnam(value);
+			if(!gr) {
+				TURN_LOG_FUNC(TURN_LOG_LEVEL_ERROR, "Unknown group name: %s\n",value);
+				exit(-1);
+			} else {
+				procgroupid = gr->gr_gid;
+				procgroupid_set = 1;
+				STRCPY(procgroupname,value);
+			}
+		}
+			break;
+		case 'i':
+			STRCPY(turn_params.relay_ifname, value);
+			break;
+		case 'm':
 #if defined(OPENSSL_THREADS)
-		if(atoi(value)>MAX_NUMBER_OF_GENERAL_RELAY_SERVERS) {
+			if(atoi(value)>MAX_NUMBER_OF_GENERAL_RELAY_SERVERS) {
 			TURN_LOG_FUNC(TURN_LOG_LEVEL_WARNING, "WARNING: max number of relay threads is 128.\n");
 			turn_params.general_relay_servers_number = MAX_NUMBER_OF_GENERAL_RELAY_SERVERS;
 		} else if(atoi(value)<=0) {
@@ -1215,309 +1209,306 @@ static void set_option(int c, char *value)
 			turn_params.general_relay_servers_number = atoi(value);
 		}
 #else
-		TURN_LOG_FUNC(TURN_LOG_LEVEL_WARNING, "WARNING: OpenSSL version is too old OR does not support threading,\n I am using single thread for relaying.\n");
+			TURN_LOG_FUNC(TURN_LOG_LEVEL_WARNING, "WARNING: OpenSSL version is too old OR does not support threading,\n I am using single thread for relaying.\n");
 #endif
-		break;
-	case 'd':
-		STRCPY(turn_params.listener_ifname, value);
-		break;
-	case 'p':
-		turn_params.listener_port = atoi(value);
-		break;
-	case TLS_PORT_OPT:
-		turn_params.tls_listener_port = atoi(value);
-		break;
-	case ALT_PORT_OPT:
-		turn_params.alt_listener_port = atoi(value);
-		break;
-	case ALT_TLS_PORT_OPT:
-		turn_params.alt_tls_listener_port = atoi(value);
-		break;
-	case MIN_PORT_OPT:
-		turn_params.min_port = atoi(value);
-		break;
-	case MAX_PORT_OPT:
-		turn_params.max_port = atoi(value);
-		break;
-	case SECURE_STUN_OPT:
-		turn_params.secure_stun = get_bool_value(value);
-		break;
-	case NO_MULTICAST_PEERS_OPT:
-		turn_params.no_multicast_peers = get_bool_value(value);
-		break;
-	case NO_LOOPBACK_PEERS_OPT:
-		turn_params.no_loopback_peers = get_bool_value(value);
-		break;
-	case STALE_NONCE_OPT:
-		turn_params.stale_nonce = get_int_value(value, STUN_DEFAULT_NONCE_EXPIRATION_TIME);
-		break;
-	case MAX_ALLOCATE_LIFETIME_OPT:
-		turn_params.max_allocate_lifetime = get_int_value(value, STUN_DEFAULT_MAX_ALLOCATE_LIFETIME);
-		break;
-	case CHANNEL_LIFETIME_OPT:
-		turn_params.channel_lifetime = get_int_value(value, STUN_DEFAULT_CHANNEL_LIFETIME);
-		break;
-	case PERMISSION_LIFETIME_OPT:
-		turn_params.permission_lifetime = get_int_value(value, STUN_DEFAULT_PERMISSION_LIFETIME);
-		break;
-	case MAX_ALLOCATE_TIMEOUT_OPT:
-		TURN_MAX_ALLOCATE_TIMEOUT = atoi(value);
-		TURN_MAX_ALLOCATE_TIMEOUT_STUN_ONLY = atoi(value);
-		break;
-	case 'S':
-		turn_params.stun_only = get_bool_value(value);
-		break;
-	case NO_STUN_OPT:
-		turn_params.no_stun = get_bool_value(value);
-		break;
-	case 'L':
-		add_listener_addr(value);
-		break;
-	case 'E':
-		add_relay_addr(value);
-		break;
-	case 'X':
-		if(value) {
-			char *div = strchr(value,'/');
-			if(div) {
-				char *nval=turn_strdup(value);
-				div = strchr(nval,'/');
-				div[0]=0;
-				++div;
-				ioa_addr apub,apriv;
-				if(make_ioa_addr((const u08bits*)nval,0,&apub)<0) {
-					TURN_LOG_FUNC(TURN_LOG_LEVEL_ERROR,"-X : Wrong address format: %s\n",nval);
-				} else {
-					if(make_ioa_addr((const u08bits*)div,0,&apriv)<0) {
-						TURN_LOG_FUNC(TURN_LOG_LEVEL_ERROR,"-X : Wrong address format: %s\n",div);
+			break;
+		case 'd':
+			STRCPY(turn_params.listener_ifname, value);
+			break;
+		case 'p':
+			turn_params.listener_port = atoi(value);
+			break;
+		case TLS_PORT_OPT:
+			turn_params.tls_listener_port = atoi(value);
+			break;
+		case ALT_PORT_OPT:
+			turn_params.alt_listener_port = atoi(value);
+			break;
+		case ALT_TLS_PORT_OPT:
+			turn_params.alt_tls_listener_port = atoi(value);
+			break;
+		case MIN_PORT_OPT:
+			turn_params.min_port = atoi(value);
+			break;
+		case MAX_PORT_OPT:
+			turn_params.max_port = atoi(value);
+			break;
+		case SECURE_STUN_OPT:
+			turn_params.secure_stun = get_bool_value(value);
+			break;
+		case NO_MULTICAST_PEERS_OPT:
+			turn_params.no_multicast_peers = get_bool_value(value);
+			break;
+		case NO_LOOPBACK_PEERS_OPT:
+			turn_params.no_loopback_peers = get_bool_value(value);
+			break;
+		case STALE_NONCE_OPT:
+			turn_params.stale_nonce = get_int_value(value, STUN_DEFAULT_NONCE_EXPIRATION_TIME);
+			break;
+		case MAX_ALLOCATE_LIFETIME_OPT:
+			turn_params.max_allocate_lifetime = get_int_value(value, STUN_DEFAULT_MAX_ALLOCATE_LIFETIME);
+			break;
+		case CHANNEL_LIFETIME_OPT:
+			turn_params.channel_lifetime = get_int_value(value, STUN_DEFAULT_CHANNEL_LIFETIME);
+			break;
+		case PERMISSION_LIFETIME_OPT:
+			turn_params.permission_lifetime = get_int_value(value, STUN_DEFAULT_PERMISSION_LIFETIME);
+			break;
+		case MAX_ALLOCATE_TIMEOUT_OPT:
+			TURN_MAX_ALLOCATE_TIMEOUT = atoi(value);
+			TURN_MAX_ALLOCATE_TIMEOUT_STUN_ONLY = atoi(value);
+			break;
+		case 'S':
+			turn_params.stun_only = get_bool_value(value);
+			break;
+		case NO_STUN_OPT:
+			turn_params.no_stun = get_bool_value(value);
+			break;
+		case 'L':
+			add_listener_addr(value);
+			break;
+		case 'E':
+			add_relay_addr(value);
+			break;
+		case 'X':
+			if(value) {
+				char *div = strchr(value,'/');
+				if(div) {
+					char *nval=turn_strdup(value);
+					div = strchr(nval,'/');
+					div[0]=0;
+					++div;
+					ioa_addr apub,apriv;
+					if(make_ioa_addr((const u08bits*)nval,0,&apub)<0) {
+						TURN_LOG_FUNC(TURN_LOG_LEVEL_ERROR,"-X : Wrong address format: %s\n",nval);
 					} else {
-						ioa_addr_add_mapping(&apub,&apriv);
+						if(make_ioa_addr((const u08bits*)div,0,&apriv)<0) {
+							TURN_LOG_FUNC(TURN_LOG_LEVEL_ERROR,"-X : Wrong address format: %s\n",div);
+						} else {
+							ioa_addr_add_mapping(&apub,&apriv);
+						}
 					}
-				}
-				turn_free(nval,strlen(nval)+1);
-			} else {
-				if(turn_params.external_ip) {
-					TURN_LOG_FUNC(TURN_LOG_LEVEL_ERROR, "You cannot define external IP more than once in the configuration\n");
+					turn_free(nval,strlen(nval)+1);
 				} else {
-					turn_params.external_ip = (ioa_addr*)allocate_super_memory_engine(turn_params.listener.ioa_eng, sizeof(ioa_addr));
-					if(make_ioa_addr((const u08bits*)value,0,turn_params.external_ip)<0) {
-						TURN_LOG_FUNC(TURN_LOG_LEVEL_ERROR,"-X : Wrong address format: %s\n",value);
-						turn_free(turn_params.external_ip,sizeof(ioa_addr));
-						turn_params.external_ip = NULL;
+					if(turn_params.external_ip) {
+						TURN_LOG_FUNC(TURN_LOG_LEVEL_ERROR, "You cannot define external IP more than once in the configuration\n");
+					} else {
+						turn_params.external_ip = (ioa_addr*)allocate_super_memory_engine(turn_params.listener.ioa_eng, sizeof(ioa_addr));
+						if(make_ioa_addr((const u08bits*)value,0,turn_params.external_ip)<0) {
+							TURN_LOG_FUNC(TURN_LOG_LEVEL_ERROR,"-X : Wrong address format: %s\n",value);
+							turn_free(turn_params.external_ip,sizeof(ioa_addr));
+							turn_params.external_ip = NULL;
+						}
 					}
 				}
 			}
-		}
-		break;
-	case 'v':
-		if(turn_params.verbose != TURN_VERBOSE_EXTRA){
-			if(get_bool_value(value)) {
-				turn_params.verbose = TURN_VERBOSE_NORMAL;
-			} else {
-				turn_params.verbose = TURN_VERBOSE_NONE;
+			break;
+		case 'v':
+			if(turn_params.verbose != TURN_VERBOSE_EXTRA){
+				if(get_bool_value(value)) {
+					turn_params.verbose = TURN_VERBOSE_NORMAL;
+				} else {
+					turn_params.verbose = TURN_VERBOSE_NONE;
+				}
 			}
-		}
-		break;
-	case 'V':
-		if(get_bool_value(value)) {
-			turn_params.verbose = TURN_VERBOSE_EXTRA;
-		}
-		break;
-	case 'o':
-		turn_params.turn_daemon = get_bool_value(value);
-		break;
-	case 'a':
-		if (get_bool_value(value)) {
-			turn_params.ct = TURN_CREDENTIALS_LONG_TERM;
-			use_lt_credentials=1;
-            use_ltc=1;
-		} else {
-			turn_params.ct = TURN_CREDENTIALS_UNDEFINED;
-			use_lt_credentials=0;
-		}
-		break;
-	case 'z':
-		if (!get_bool_value(value)) {
-			turn_params.ct = TURN_CREDENTIALS_UNDEFINED;
-			anon_credentials = 0;
-		} else {
-			turn_params.ct = TURN_CREDENTIALS_NONE;
-			anon_credentials = 1;
-		}
-		break;
-	case PROD_OPT:
-		turn_params.prod = get_bool_value(value);
-		break;
-	case 'f':
-		turn_params.fingerprint = get_bool_value(value);
-		break;
-	case 'u':
-		add_static_user_account(value);
-		break;
-	case 'b':
+			break;
+		case 'V':
+			if(get_bool_value(value)) {
+				turn_params.verbose = TURN_VERBOSE_EXTRA;
+			}
+			break;
+		case 'o':
+			turn_params.turn_daemon = get_bool_value(value);
+			break;
+		case 'a':
+			if (get_bool_value(value)) {
+				turn_params.ct = TURN_CREDENTIALS_LONG_TERM;
+				use_lt_credentials=1;
+				use_ltc=1;
+			} else {
+				turn_params.ct = TURN_CREDENTIALS_UNDEFINED;
+				use_lt_credentials=0;
+			}
+			break;
+		case 'z':
+			if (!get_bool_value(value)) {
+				turn_params.ct = TURN_CREDENTIALS_UNDEFINED;
+				anon_credentials = 0;
+			} else {
+				turn_params.ct = TURN_CREDENTIALS_NONE;
+				anon_credentials = 1;
+			}
+			break;
+		case PROD_OPT:
+			turn_params.prod = get_bool_value(value);
+			break;
+		case 'f':
+			turn_params.fingerprint = get_bool_value(value);
+			break;
+		case 'u':
+			add_static_user_account(value);
+			break;
+		case 'b':
 #if defined(TURN_NO_SQLITE)
-	  TURN_LOG_FUNC(TURN_LOG_LEVEL_WARNING, "WARNING: Options -b, --userdb and --db are not supported because SQLite is not supported in this build.\n");
+			TURN_LOG_FUNC(TURN_LOG_LEVEL_WARNING, "WARNING: Options -b, --userdb and --db are not supported because SQLite is not supported in this build.\n");
 #else
-		STRCPY(turn_params.default_users_db.persistent_users_db.userdb, value);
-		turn_params.default_users_db.userdb_type = TURN_USERDB_TYPE_SQLITE;
+			STRCPY(turn_params.default_users_db.persistent_users_db.userdb, value);
+			turn_params.default_users_db.userdb_type = TURN_USERDB_TYPE_SQLITE;
 #endif
-		break;
+			break;
 #if !defined(TURN_NO_PQ)
-	case 'e':
-		STRCPY(turn_params.default_users_db.persistent_users_db.userdb, value);
-		turn_params.default_users_db.userdb_type = TURN_USERDB_TYPE_PQ;
-		break;
+		case 'e':
+			STRCPY(turn_params.default_users_db.persistent_users_db.userdb, value);
+			turn_params.default_users_db.userdb_type = TURN_USERDB_TYPE_PQ;
+			break;
 #endif
 #if !defined(TURN_NO_MYSQL)
-	case 'M':
-		STRCPY(turn_params.default_users_db.persistent_users_db.userdb, value);
-		turn_params.default_users_db.userdb_type = TURN_USERDB_TYPE_MYSQL;
-		break;
+		case 'M':
+			STRCPY(turn_params.default_users_db.persistent_users_db.userdb, value);
+			turn_params.default_users_db.userdb_type = TURN_USERDB_TYPE_MYSQL;
+			break;
 #endif
 #if !defined(TURN_NO_MONGO)
-	case 'J':
-		STRCPY(turn_params.default_users_db.persistent_users_db.userdb, value);
-		turn_params.default_users_db.userdb_type = TURN_USERDB_TYPE_MONGO;
-		break;
+		case 'J':
+			STRCPY(turn_params.default_users_db.persistent_users_db.userdb, value);
+			turn_params.default_users_db.userdb_type = TURN_USERDB_TYPE_MONGO;
+			break;
 #endif
 #if !defined(TURN_NO_HIREDIS)
-	case 'N':
-		STRCPY(turn_params.default_users_db.persistent_users_db.userdb, value);
-		turn_params.default_users_db.userdb_type = TURN_USERDB_TYPE_REDIS;
-		break;
-	case 'O':
-		STRCPY(turn_params.redis_statsdb, value);
-		turn_params.use_redis_statsdb = 1;
-		break;
+		case 'N':
+			STRCPY(turn_params.default_users_db.persistent_users_db.userdb, value);
+			turn_params.default_users_db.userdb_type = TURN_USERDB_TYPE_REDIS;
+			break;
+		case 'O':
+			STRCPY(turn_params.redis_statsdb, value);
+			turn_params.use_redis_statsdb = 1;
+			break;
 #endif
-	case AUTH_SECRET_OPT:
-		turn_params.use_auth_secret_with_timestamp = 1;
-        use_tltc = 1;
-		turn_params.ct = TURN_CREDENTIALS_LONG_TERM;
-		use_lt_credentials = 1;
-		break;
-	case STATIC_AUTH_SECRET_VAL_OPT:
-		add_to_secrets_list(&turn_params.default_users_db.ram_db.static_auth_secrets,value);
-		turn_params.use_auth_secret_with_timestamp = 1;
-        use_tltc = 1;
-		turn_params.ct = TURN_CREDENTIALS_LONG_TERM;
-		use_lt_credentials = 1;
-		break;
-	case AUTH_SECRET_TS_EXP:
-		TURN_LOG_FUNC(TURN_LOG_LEVEL_WARNING, "WARNING: Option --secret-ts-exp-time deprecated and has no effect.\n");
-		break;
-	case 'r':
-		set_default_realm_name(value);
-		break;
-	case 'q':
-		turn_params.user_quota = (vint)atoi(value);
-		get_realm(NULL)->options.perf_options.user_quota = atoi(value);
-		break;
-	case 'Q':
-		turn_params.total_quota = (vint)atoi(value);
-		get_realm(NULL)->options.perf_options.total_quota = atoi(value);
-		break;
-	case 's':
-		turn_params.max_bps = (band_limit_t)strtoul(value,NULL,10);
-		get_realm(NULL)->options.perf_options.max_bps = (band_limit_t)strtoul(value,NULL,10);
-		TURN_LOG_FUNC(TURN_LOG_LEVEL_INFO, "%lu bytes per second allowed per session\n",(unsigned long)turn_params.max_bps);
-		break;
-	case 'B':
-		turn_params.bps_capacity = (band_limit_t)strtoul(value,NULL,10);
-		TURN_LOG_FUNC(TURN_LOG_LEVEL_INFO, "%lu bytes per second allowed, combined server capacity\n",(unsigned long)turn_params.bps_capacity);
-		break;
-	case CHECK_ORIGIN_CONSISTENCY_OPT:
-		turn_params.check_origin = get_bool_value(value);
-		break;
-	case NO_UDP_OPT:
-		turn_params.no_udp = get_bool_value(value);
-		break;
-	case NO_TCP_OPT:
-		turn_params.no_tcp = get_bool_value(value);
-		break;
-	case NO_UDP_RELAY_OPT:
-		turn_params.no_udp_relay = get_bool_value(value);
-		break;
-	case NO_TCP_RELAY_OPT:
-		turn_params.no_tcp_relay = get_bool_value(value);
-		break;
-	case NO_TLS_OPT:
+		case AUTH_SECRET_OPT:
+			turn_params.use_auth_secret_with_timestamp = 1;
+			use_tltc = 1;
+			turn_params.ct = TURN_CREDENTIALS_LONG_TERM;
+			use_lt_credentials = 1;
+			break;
+		case STATIC_AUTH_SECRET_VAL_OPT:
+			add_to_secrets_list(&turn_params.default_users_db.ram_db.static_auth_secrets,value);
+			turn_params.use_auth_secret_with_timestamp = 1;
+			use_tltc = 1;
+			turn_params.ct = TURN_CREDENTIALS_LONG_TERM;
+			use_lt_credentials = 1;
+			break;
+		case AUTH_SECRET_TS_EXP:
+			TURN_LOG_FUNC(TURN_LOG_LEVEL_WARNING, "WARNING: Option --secret-ts-exp-time deprecated and has no effect.\n");
+			break;
+		case 'r':
+			set_default_realm_name(value);
+			break;
+		case 'q':
+			turn_params.user_quota = (vint)atoi(value);
+			get_realm(NULL)->options.perf_options.user_quota = atoi(value);
+			break;
+		case 'Q':
+			turn_params.total_quota = (vint)atoi(value);
+			get_realm(NULL)->options.perf_options.total_quota = atoi(value);
+			break;
+		case 's':
+			turn_params.max_bps = (band_limit_t)strtoul(value,NULL,10);
+			get_realm(NULL)->options.perf_options.max_bps = (band_limit_t)strtoul(value,NULL,10);
+			TURN_LOG_FUNC(TURN_LOG_LEVEL_INFO, "%lu bytes per second allowed per session\n",(unsigned long)turn_params.max_bps);
+			break;
+		case 'B':
+			turn_params.bps_capacity = (band_limit_t)strtoul(value,NULL,10);
+			TURN_LOG_FUNC(TURN_LOG_LEVEL_INFO, "%lu bytes per second allowed, combined server capacity\n",(unsigned long)turn_params.bps_capacity);
+			break;
+		case CHECK_ORIGIN_CONSISTENCY_OPT:
+			turn_params.check_origin = get_bool_value(value);
+			break;
+		case NO_UDP_OPT:
+			turn_params.no_udp = get_bool_value(value);
+			break;
+		case NO_TCP_OPT:
+			turn_params.no_tcp = get_bool_value(value);
+			break;
+		case NO_UDP_RELAY_OPT:
+			turn_params.no_udp_relay = get_bool_value(value);
+			break;
+		case NO_TCP_RELAY_OPT:
+			turn_params.no_tcp_relay = get_bool_value(value);
+			break;
+		case NO_TLS_OPT:
 #if !TLS_SUPPORTED
-		turn_params.no_tls = 1;
+			turn_params.no_tls = 1;
 #else
-		turn_params.no_tls = get_bool_value(value);
+			turn_params.no_tls = get_bool_value(value);
 #endif
-		break;
-	case NO_DTLS_OPT:
+			break;
+		case NO_DTLS_OPT:
 #if DTLS_SUPPORTED
-		turn_params.no_dtls = get_bool_value(value);
+			turn_params.no_dtls = get_bool_value(value);
 #else
-		turn_params.no_dtls = 1;
+			turn_params.no_dtls = 1;
 #endif
-		break;
-	case CERT_FILE_OPT:
-		STRCPY(turn_params.cert_file,value);
-		break;
-	case CA_FILE_OPT:
-		STRCPY(turn_params.ca_cert_file,value);
-		break;
-	case DH_FILE_OPT:
-		STRCPY(turn_params.dh_file,value);
-		break;
-	case SECRET_KEY_OPT:
-		 STRCPY(turn_params.secret_key_file,value);
-		 break;
-  	case ALLOW_ENCODING_OPT:
-  		turn_params.allow_encoding = atoi(value);
-  		break;
-	case PKEY_FILE_OPT:
-		STRCPY(turn_params.pkey_file,value);
-		break;
-	case PKEY_PWD_OPT:
-		STRCPY(turn_params.tls_password,value);
-		break;
-	case ALTERNATE_SERVER_OPT:
-		add_alternate_server(value);
-		break;
-	case AUX_SERVER_OPT:
-		add_aux_server(value);
-		break;
-	case UDP_SELF_BALANCE_OPT:
-		turn_params.udp_self_balance = get_bool_value(value);
-		break;
-	case TLS_ALTERNATE_SERVER_OPT:
-		add_tls_alternate_server(value);
-		break;
-	case ALLOWED_PEER_IPS:
-		if (add_ip_list_range(value, NULL, &turn_params.ip_whitelist) == 0) TURN_LOG_FUNC(TURN_LOG_LEVEL_INFO, "White listing: %s\n", value);
-		break;
-	case DENIED_PEER_IPS:
-		if (add_ip_list_range(value, NULL, &turn_params.ip_blacklist) == 0) TURN_LOG_FUNC(TURN_LOG_LEVEL_INFO, "Black listing: %s\n", value);
-		break;
-	case CIPHER_LIST_OPT:
-		STRCPY(turn_params.cipher_list,value);
-		break;
-	case PIDFILE_OPT:
-		STRCPY(turn_params.pidfile,value);
-		break;
-	case 'C':
-		if(value && *value) {
-			turn_params.rest_api_separator=*value;
-		}
-		break;
-	/* these options have been already taken care of before: */
-	case 'l':
-	case NO_STDOUT_LOG_OPT:
-	case SYSLOG_OPT:
-	case SIMPLE_LOG_OPT:
-	case 'c':
-	case 'n':
-	case 'h':
-		break;
-	default:
-		fprintf(stderr,"\n%s\n", Usage);
-		exit(-1);
-  }
+			break;
+		case CERT_FILE_OPT:
+			STRCPY(turn_params.cert_file,value);
+			break;
+		case CA_FILE_OPT:
+			STRCPY(turn_params.ca_cert_file,value);
+			break;
+		case DH_FILE_OPT:
+			STRCPY(turn_params.dh_file,value);
+			break;
+		case SECRET_KEY_OPT:
+			STRCPY(turn_params.secret_key_file,value);
+			break;
+		case PKEY_FILE_OPT:
+			STRCPY(turn_params.pkey_file,value);
+			break;
+		case PKEY_PWD_OPT:
+			STRCPY(turn_params.tls_password,value);
+			break;
+		case ALTERNATE_SERVER_OPT:
+			add_alternate_server(value);
+			break;
+		case AUX_SERVER_OPT:
+			add_aux_server(value);
+			break;
+		case UDP_SELF_BALANCE_OPT:
+			turn_params.udp_self_balance = get_bool_value(value);
+			break;
+		case TLS_ALTERNATE_SERVER_OPT:
+			add_tls_alternate_server(value);
+			break;
+		case ALLOWED_PEER_IPS:
+			if (add_ip_list_range(value, NULL, &turn_params.ip_whitelist) == 0) TURN_LOG_FUNC(TURN_LOG_LEVEL_INFO, "White listing: %s\n", value);
+			break;
+		case DENIED_PEER_IPS:
+			if (add_ip_list_range(value, NULL, &turn_params.ip_blacklist) == 0) TURN_LOG_FUNC(TURN_LOG_LEVEL_INFO, "Black listing: %s\n", value);
+			break;
+		case CIPHER_LIST_OPT:
+			STRCPY(turn_params.cipher_list,value);
+			break;
+		case PIDFILE_OPT:
+			STRCPY(turn_params.pidfile,value);
+			break;
+		case 'C':
+			if(value && *value) {
+				turn_params.rest_api_separator=*value;
+			}
+			break;
+			/* these options have been already taken care of before: */
+		case 'l':
+		case NO_STDOUT_LOG_OPT:
+		case SYSLOG_OPT:
+		case SIMPLE_LOG_OPT:
+		case 'c':
+		case 'n':
+		case 'h':
+			break;
+		default:
+			fprintf(stderr,"\n%s\n", Usage);
+			exit(-1);
+	}
 }
 
 static int parse_arg_string(char *sarg, int *c, char **value)
@@ -1546,7 +1537,7 @@ static int parse_arg_string(char *sarg, int *c, char **value)
 				((*value)[len-1]=='\r') ||
 				((*value)[len-1]==' ') ||
 				((*value)[len-1]=='\t')
-				) ) {
+		) ) {
 			(*value)[--len]=0;
 		}
 		if(len>0 && (*value)[len-1]=='\"') {
@@ -1572,25 +1563,25 @@ static void read_config_file(int argc, char **argv, int pass)
 
 	if(pass == 0) {
 
-	  if (argv) {
-	    int i = 0;
-	    for (i = 0; i < argc; i++) {
-	      if (!strcmp(argv[i], "-c")) {
-		if (i < argc - 1) {
-		  STRCPY(config_file, argv[i + 1]);
-		} else {
-		  TURN_LOG_FUNC(TURN_LOG_LEVEL_WARNING, "Wrong usage of -c option\n");
+		if (argv) {
+			int i = 0;
+			for (i = 0; i < argc; i++) {
+				if (!strcmp(argv[i], "-c")) {
+					if (i < argc - 1) {
+						STRCPY(config_file, argv[i + 1]);
+					} else {
+						TURN_LOG_FUNC(TURN_LOG_LEVEL_WARNING, "Wrong usage of -c option\n");
+					}
+				} else if (!strcmp(argv[i], "-n")) {
+					turn_params.do_not_use_config_file = 1;
+					config_file[0]=0;
+					return;
+				} else if (!strcmp(argv[i], "-h")) {
+					printf("\n%s\n",Usage);
+					exit(0);
+				}
+			}
 		}
-	      } else if (!strcmp(argv[i], "-n")) {
-		turn_params.do_not_use_config_file = 1;
-		config_file[0]=0;
-		return;
-	      } else if (!strcmp(argv[i], "-h")) {
-		printf("\n%s\n",Usage);
-		exit(0);
-	      }
-	    }
-	  }
 	}
 
 	if (!turn_params.do_not_use_config_file && config_file[0]) {
@@ -1625,7 +1616,7 @@ static void read_config_file(int argc, char **argv, int pass)
 					STRCPY(sarg, s);
 					if (parse_arg_string(sarg, &c, &value) < 0) {
 						TURN_LOG_FUNC(TURN_LOG_LEVEL_WARNING, "Bad configuration format: %s\n",
-							sarg);
+									  sarg);
 					} else if((pass == 0) && (c == 'l')) {
 						set_logfile(value);
 					} else if((pass==0) && (c==NO_STDOUT_LOG_OPT)) {
@@ -1635,9 +1626,9 @@ static void read_config_file(int argc, char **argv, int pass)
 					} else if((pass==0) && (c==SIMPLE_LOG_OPT)) {
 						set_simple_log(get_bool_value(value));
 					} else if((pass == 0) && (c != 'u')) {
-					  set_option(c, value);
+						set_option(c, value);
 					} else if((pass > 0) && (c == 'u')) {
-					  set_option(c, value);
+						set_option(c, value);
 					}
 				}
 			}
@@ -1646,7 +1637,7 @@ static void read_config_file(int argc, char **argv, int pass)
 
 		} else
 			TURN_LOG_FUNC(TURN_LOG_LEVEL_WARNING, "WARNING: Cannot find config file: %s. Default and command-line settings will be used.\n",
-				config_file);
+						  config_file);
 	}
 }
 
@@ -1675,175 +1666,175 @@ static int adminmain(int argc, char **argv)
 
 	while (((c = getopt_long(argc, argv, ADMIN_OPTIONS, uo.u.o, NULL)) != -1)) {
 		switch (c){
-        case 'P':
-            if(pwd[0]) {
-                char result[257];
-                generate_new_enc_password((char*)pwd, result);
-                printf("%s\n",result);
-                exit(0);
-            }
-            print_enc_password = 1;
-            break;
-        case 'E':
-            print_enc_aes_password = 1;
-            break;
-        case 'g':
-            ct = TA_SET_REALM_OPTION;
-            break;
-        case 'G':
-            ct = TA_LIST_REALM_OPTIONS;
-            break;
-        case ADMIN_USER_QUOTA_OPT:
-            po.user_quota = (vint)atoi(optarg);
-            break;
-        case ADMIN_TOTAL_QUOTA_OPT:
-            po.total_quota = (vint)atoi(optarg);
-            break;
-        case ADMIN_MAX_BPS_OPT:
-            po.max_bps = (vint)atoi(optarg);
-            break;
-        case 'O':
-            ct = TA_ADD_ORIGIN;
-            break;
-        case 'R':
-            ct = TA_DEL_ORIGIN;
-            break;
-        case 'I':
-            ct = TA_LIST_ORIGINS;
-            break;
-        case 'o':
-            STRCPY(origin,optarg);
-            break;
-        case 'k':
-            ct = TA_PRINT_KEY;
-            break;
-        case 'a':
-            ct = TA_UPDATE_USER;
-            break;
-        case 'd':
-            ct = TA_DELETE_USER;
-            break;
-        case 'A':
-            ct = TA_UPDATE_USER;
-            is_admin = 1;
-            break;
-        case 'D':
-            ct = TA_DELETE_USER;
-            is_admin = 1;
-            break;
-        case 'l':
-            ct = TA_LIST_USERS;
-            break;
-        case 'L':
-            ct = TA_LIST_USERS;
-            is_admin = 1;
-            break;
-        case 's':
-            ct = TA_SET_SECRET;
-            STRCPY(secret,optarg);
-            break;
-        case 'S':
-            ct = TA_SHOW_SECRET;
-            break;
-        case 'X':
-            ct = TA_DEL_SECRET;
-            if(optarg)
-                STRCPY(secret,optarg);
-            break;
-        case DEL_ALL_AUTH_SECRETS_OPT:
-            ct = TA_DEL_SECRET;
-            break;
+			case 'P':
+				if(pwd[0]) {
+					char result[257];
+					generate_new_enc_password((char*)pwd, result);
+					printf("%s\n",result);
+					exit(0);
+				}
+				print_enc_password = 1;
+				break;
+			case 'E':
+				print_enc_aes_password = 1;
+				break;
+			case 'g':
+				ct = TA_SET_REALM_OPTION;
+				break;
+			case 'G':
+				ct = TA_LIST_REALM_OPTIONS;
+				break;
+			case ADMIN_USER_QUOTA_OPT:
+				po.user_quota = (vint)atoi(optarg);
+				break;
+			case ADMIN_TOTAL_QUOTA_OPT:
+				po.total_quota = (vint)atoi(optarg);
+				break;
+			case ADMIN_MAX_BPS_OPT:
+				po.max_bps = (vint)atoi(optarg);
+				break;
+			case 'O':
+				ct = TA_ADD_ORIGIN;
+				break;
+			case 'R':
+				ct = TA_DEL_ORIGIN;
+				break;
+			case 'I':
+				ct = TA_LIST_ORIGINS;
+				break;
+			case 'o':
+				STRCPY(origin,optarg);
+				break;
+			case 'k':
+				ct = TA_PRINT_KEY;
+				break;
+			case 'a':
+				ct = TA_UPDATE_USER;
+				break;
+			case 'd':
+				ct = TA_DELETE_USER;
+				break;
+			case 'A':
+				ct = TA_UPDATE_USER;
+				is_admin = 1;
+				break;
+			case 'D':
+				ct = TA_DELETE_USER;
+				is_admin = 1;
+				break;
+			case 'l':
+				ct = TA_LIST_USERS;
+				break;
+			case 'L':
+				ct = TA_LIST_USERS;
+				is_admin = 1;
+				break;
+			case 's':
+				ct = TA_SET_SECRET;
+				STRCPY(secret,optarg);
+				break;
+			case 'S':
+				ct = TA_SHOW_SECRET;
+				break;
+			case 'X':
+				ct = TA_DEL_SECRET;
+				if(optarg)
+					STRCPY(secret,optarg);
+				break;
+			case DEL_ALL_AUTH_SECRETS_OPT:
+				ct = TA_DEL_SECRET;
+				break;
 #if !defined(TURN_NO_SQLITE)
-		case 'b':
-		  STRCPY(turn_params.default_users_db.persistent_users_db.userdb,optarg);
-		  turn_params.default_users_db.userdb_type = TURN_USERDB_TYPE_SQLITE;
-		  break;
+			case 'b':
+				STRCPY(turn_params.default_users_db.persistent_users_db.userdb,optarg);
+				turn_params.default_users_db.userdb_type = TURN_USERDB_TYPE_SQLITE;
+				break;
 #endif
 #if !defined(TURN_NO_PQ)
-		case 'e':
-		  STRCPY(turn_params.default_users_db.persistent_users_db.userdb,optarg);
-		  turn_params.default_users_db.userdb_type = TURN_USERDB_TYPE_PQ;
-		  break;
+			case 'e':
+				STRCPY(turn_params.default_users_db.persistent_users_db.userdb,optarg);
+				turn_params.default_users_db.userdb_type = TURN_USERDB_TYPE_PQ;
+				break;
 #endif
 #if !defined(TURN_NO_MYSQL)
-		case 'M':
-		  STRCPY(turn_params.default_users_db.persistent_users_db.userdb,optarg);
-		  turn_params.default_users_db.userdb_type = TURN_USERDB_TYPE_MYSQL;
-		  break;
+			case 'M':
+				STRCPY(turn_params.default_users_db.persistent_users_db.userdb,optarg);
+				turn_params.default_users_db.userdb_type = TURN_USERDB_TYPE_MYSQL;
+				break;
 #endif
 #if !defined(TURN_NO_MONGO)
-		case 'J':
-		  STRCPY(turn_params.default_users_db.persistent_users_db.userdb,optarg);
-		  turn_params.default_users_db.userdb_type = TURN_USERDB_TYPE_MONGO;
-		  break;
+			case 'J':
+				STRCPY(turn_params.default_users_db.persistent_users_db.userdb,optarg);
+				turn_params.default_users_db.userdb_type = TURN_USERDB_TYPE_MONGO;
+				break;
 #endif
 #if !defined(TURN_NO_HIREDIS)
-		case 'N':
-		  STRCPY(turn_params.default_users_db.persistent_users_db.userdb,optarg);
-		  turn_params.default_users_db.userdb_type = TURN_USERDB_TYPE_REDIS;
-		  break;
+			case 'N':
+				STRCPY(turn_params.default_users_db.persistent_users_db.userdb,optarg);
+				turn_params.default_users_db.userdb_type = TURN_USERDB_TYPE_REDIS;
+				break;
 #endif
-        case 'u':
-            STRCPY(user,optarg);
-            if(!is_secure_username((u08bits*)user)) {
-                TURN_LOG_FUNC(TURN_LOG_LEVEL_ERROR, "Wrong user name structure or symbols, choose another name: %s\n",user);
-                exit(-1);
-            }
-            if(SASLprep((u08bits*)user)<0) {
-                TURN_LOG_FUNC(TURN_LOG_LEVEL_ERROR, "Wrong user name: %s\n",user);
-                exit(-1);
-            }
-            break;
-        case 'r':
-            set_default_realm_name(optarg);
-            STRCPY(realm,optarg);
-            if(SASLprep((u08bits*)realm)<0) {
-                TURN_LOG_FUNC(TURN_LOG_LEVEL_ERROR, "Wrong realm: %s\n",realm);
-                exit(-1);
-            }
-            break;
-        case 'p':
-            STRCPY(pwd,optarg);
-            if(SASLprep((u08bits*)pwd)<0) {
-                TURN_LOG_FUNC(TURN_LOG_LEVEL_ERROR, "Wrong password: %s\n",pwd);
-                exit(-1);
-            }
-            if(print_enc_password) {
-                char result[257];
-                generate_new_enc_password((char*)pwd, result);
-                printf("%s\n",result);
-                exit(0);
-            }
-            if(print_enc_aes_password){
-				encrypt_aes_128(pwd, generated_key);
-                exit(0);
-            }
-            break;
-        case 'x':
-            generate_aes_128_key(optarg, generated_key);
-            exit(0);
-            break;
-        case 'f':
-            fptr = fopen((char*)optarg, "r");
-            if(fptr == NULL){
-                printf("No such file like %s\n", (char*)optarg);
-            }
-            else{
-				fseek (fptr, 0, SEEK_SET);
-				fread (generated_key, sizeof(char), 16, fptr);
-				fclose (fptr);
-            }
-            break;
-        case 'v':
-			decrypt_aes_128((char*)optarg, generated_key);
-            exit(0);
-        case 'h':
-            printf("\n%s\n", AdminUsage);
-            exit(0);
-            break;
-        default:
-            fprintf(stderr,"\n%s\n", AdminUsage);
-            exit(-1);
+			case 'u':
+				STRCPY(user,optarg);
+				if(!is_secure_username((u08bits*)user)) {
+					TURN_LOG_FUNC(TURN_LOG_LEVEL_ERROR, "Wrong user name structure or symbols, choose another name: %s\n",user);
+					exit(-1);
+				}
+				if(SASLprep((u08bits*)user)<0) {
+					TURN_LOG_FUNC(TURN_LOG_LEVEL_ERROR, "Wrong user name: %s\n",user);
+					exit(-1);
+				}
+				break;
+			case 'r':
+				set_default_realm_name(optarg);
+				STRCPY(realm,optarg);
+				if(SASLprep((u08bits*)realm)<0) {
+					TURN_LOG_FUNC(TURN_LOG_LEVEL_ERROR, "Wrong realm: %s\n",realm);
+					exit(-1);
+				}
+				break;
+			case 'p':
+				STRCPY(pwd,optarg);
+				if(SASLprep((u08bits*)pwd)<0) {
+					TURN_LOG_FUNC(TURN_LOG_LEVEL_ERROR, "Wrong password: %s\n",pwd);
+					exit(-1);
+				}
+				if(print_enc_password) {
+					char result[257];
+					generate_new_enc_password((char*)pwd, result);
+					printf("%s\n",result);
+					exit(0);
+				}
+				if(print_enc_aes_password){
+					encrypt_aes_128(pwd, generated_key);
+					exit(0);
+				}
+				break;
+			case 'x':
+				generate_aes_128_key(optarg, generated_key);
+				exit(0);
+				break;
+			case 'f':
+				fptr = fopen((char*)optarg, "r");
+				if(fptr == NULL){
+					printf("No such file like %s\n", (char*)optarg);
+				}
+				else{
+					fseek (fptr, 0, SEEK_SET);
+					fread (generated_key, sizeof(char), 16, fptr);
+					fclose (fptr);
+				}
+				break;
+			case 'v':
+				decrypt_aes_128((char*)optarg, generated_key);
+				exit(0);
+			case 'h':
+				printf("\n%s\n", AdminUsage);
+				exit(0);
+				break;
+			default:
+				fprintf(stderr,"\n%s\n", AdminUsage);
+				exit(-1);
 		}
 	}
 
@@ -1978,14 +1969,14 @@ static void set_network_engine(void)
 		return;
 	turn_params.net_engine_version = NEV_UDP_SOCKET_PER_ENDPOINT;
 #if defined(SO_REUSEPORT)
-#if defined(__linux__) || defined(__LINUX__) || defined(__linux) || defined(linux__) || defined(LINUX) || defined(__LINUX) || defined(LINUX__)
+	#if defined(__linux__) || defined(__LINUX__) || defined(__linux) || defined(linux__) || defined(LINUX) || defined(__LINUX) || defined(LINUX__)
 	turn_params.net_engine_version = NEV_UDP_SOCKET_PER_THREAD;
 #else /* BSD ? */
 	turn_params.net_engine_version = NEV_UDP_SOCKET_PER_SESSION;
 #endif /* Linux */
 #else /* defined(SO_REUSEPORT) */
 #if defined(__linux__) || defined(__LINUX__) || defined(__linux) || defined(linux__) || defined(LINUX) || defined(__LINUX) || defined(LINUX__)
-#if LINUX_VERSION_CODE >= KERNEL_VERSION(2,6,33)
+	#if LINUX_VERSION_CODE >= KERNEL_VERSION(2,6,33)
 	//net_engine_version = NEV_UDP_SOCKET_PER_SESSION;
 	turn_params.net_engine_version = NEV_UDP_SOCKET_PER_ENDPOINT;
 #else
@@ -2070,20 +2061,20 @@ int main(int argc, char **argv)
 
 		while (((c = getopt_long(argc, argv, OPTIONS, uo.u.o, NULL)) != -1)) {
 			switch (c){
-			case 'l':
-				set_logfile(optarg);
-				break;
-			case NO_STDOUT_LOG_OPT:
-				set_no_stdout_log(get_bool_value(optarg));
-				break;
-			case SYSLOG_OPT:
-				set_log_to_syslog(get_bool_value(optarg));
-				break;
-			case SIMPLE_LOG_OPT:
-				set_simple_log(get_bool_value(optarg));
-				break;
-			default:
-				;
+				case 'l':
+					set_logfile(optarg);
+					break;
+				case NO_STDOUT_LOG_OPT:
+					set_no_stdout_log(get_bool_value(optarg));
+					break;
+				case SYSLOG_OPT:
+					set_log_to_syslog(get_bool_value(optarg));
+					break;
+				case SIMPLE_LOG_OPT:
+					set_simple_log(get_bool_value(optarg));
+					break;
+				default:
+					;
 			}
 		}
 	}
@@ -2143,9 +2134,6 @@ int main(int argc, char **argv)
 
 	TURN_LOG_FUNC(TURN_LOG_LEVEL_INFO, "Domain name: %s\n",turn_params.domain);
 	TURN_LOG_FUNC(TURN_LOG_LEVEL_INFO, "Default realm: %s\n",get_realm(NULL)->options.name);
-    if(turn_params.allow_encoding){
-        TURN_LOG_FUNC(TURN_LOG_LEVEL_INFO, "allow-encoding-with-aes activated.\n");
-    }
 
 	if(turn_params.oauth && turn_params.oauth_server_name[0]) {
 		TURN_LOG_FUNC(TURN_LOG_LEVEL_INFO, "oAuth server name: %s\n",turn_params.oauth_server_name);
@@ -2154,9 +2142,9 @@ int main(int argc, char **argv)
 	optind = 0;
 
 	while (((c = getopt_long(argc, argv, OPTIONS, uo.u.o, NULL)) != -1)) {
-	  if(c == 'u') {
-	    set_option(c,optarg);
-	  }
+		if(c == 'u') {
+			set_option(c,optarg);
+		}
 	}
 
 	if(turn_params.bps_capacity && !(turn_params.max_bps)) {
@@ -2183,7 +2171,7 @@ int main(int argc, char **argv)
 
 #if !defined(TURN_NO_SQLITE)
 	if(!strlen(turn_params.default_users_db.persistent_users_db.userdb) && (turn_params.default_users_db.userdb_type == TURN_USERDB_TYPE_SQLITE))
-			STRCPY(turn_params.default_users_db.persistent_users_db.userdb,DEFAULT_USERDB_FILE);
+		STRCPY(turn_params.default_users_db.persistent_users_db.userdb,DEFAULT_USERDB_FILE);
 #endif
 
 	argc -= optind;
@@ -2198,11 +2186,11 @@ int main(int argc, char **argv)
 		exit(-1);
 	}
 
-    if(use_ltc && use_tltc) {
+	if(use_ltc && use_tltc) {
 		TURN_LOG_FUNC(TURN_LOG_LEVEL_WARNING, "\nCONFIGURATION ALERT: You specified --lt-cred-mech and --use-auth-secret in the same time.\n"
-                       "Be aware that you could not mix the username/password and the shared secret based auth methohds. \n"
-                       "Shared secret overrides username/password based auth method. Check your configuration!\n");
-    }
+											  "Be aware that you could not mix the username/password and the shared secret based auth methohds. \n"
+											  "Shared secret overrides username/password based auth method. Check your configuration!\n");
+	}
 
 	if(!use_lt_credentials && !anon_credentials) {
 		if(turn_params.default_users_db.ram_db.users_number) {
@@ -2273,7 +2261,7 @@ int main(int argc, char **argv)
 
 		if (!turn_params.relays_number) {
 			TURN_LOG_FUNC(TURN_LOG_LEVEL_ERROR, "%s: You must specify the relay address(es)\n",
-							__FUNCTION__);
+						  __FUNCTION__);
 			fprintf(stderr,"\n%s\n", Usage);
 			exit(-1);
 		}
@@ -2321,18 +2309,18 @@ int main(int argc, char **argv)
 		if(f) {
 			STRCPY(s,turn_params.pidfile);
 		} else {
-		  snprintf(s,sizeof(s),"Cannot create pid file: %s",turn_params.pidfile);
+			snprintf(s,sizeof(s),"Cannot create pid file: %s",turn_params.pidfile);
 			perror(s);
 			TURN_LOG_FUNC(TURN_LOG_LEVEL_WARNING, "%s\n", s);
 
 			{
 				const char *pfs[] = {"/var/run/turnserver.pid",
-						"/var/spool/turnserver.pid",
-						"/var/turnserver.pid",
-						"/var/tmp/turnserver.pid",
-						"/tmp/turnserver.pid",
-						"turnserver.pid",
-						NULL};
+									 "/var/spool/turnserver.pid",
+									 "/var/turnserver.pid",
+									 "/var/tmp/turnserver.pid",
+									 "/tmp/turnserver.pid",
+									 "turnserver.pid",
+									 NULL};
 				const char **ppfs = pfs;
 				while(*ppfs) {
 					f = fopen(*ppfs,"w");
@@ -2435,7 +2423,7 @@ int THREAD_cleanup(void) {
 
 #if defined(OPENSSL_THREADS)
 
-  int i;
+	int i;
 
   if (!mutex_buf_initialized)
     return 0;
@@ -2455,7 +2443,7 @@ int THREAD_cleanup(void) {
 
 #endif
 
-  return 1;
+	return 1;
 }
 
 static void adjust_key_file_name(char *fn, const char* file_title, int critical)
@@ -2463,32 +2451,32 @@ static void adjust_key_file_name(char *fn, const char* file_title, int critical)
 	char *full_path_to_file = NULL;
 
 	if(!fn[0]) {
-	  TURN_LOG_FUNC(TURN_LOG_LEVEL_ERROR,"\nERROR: you must set the %s file parameter\n",file_title);
-	  goto keyerr;
+		TURN_LOG_FUNC(TURN_LOG_LEVEL_ERROR,"\nERROR: you must set the %s file parameter\n",file_title);
+		goto keyerr;
 	} else {
 
-	  full_path_to_file = find_config_file(fn, 1);
-	  {
-		  FILE *f = full_path_to_file ? fopen(full_path_to_file,"r") : NULL;
-		  if(!f) {
-			  TURN_LOG_FUNC(TURN_LOG_LEVEL_WARNING,"WARNING: cannot find %s file: %s (1)\n",file_title,fn);
-			  goto keyerr;
-		  } else {
-			  fclose(f);
-		  }
-	  }
+		full_path_to_file = find_config_file(fn, 1);
+		{
+			FILE *f = full_path_to_file ? fopen(full_path_to_file,"r") : NULL;
+			if(!f) {
+				TURN_LOG_FUNC(TURN_LOG_LEVEL_WARNING,"WARNING: cannot find %s file: %s (1)\n",file_title,fn);
+				goto keyerr;
+			} else {
+				fclose(f);
+			}
+		}
 
-	  if(!full_path_to_file) {
-	    TURN_LOG_FUNC(TURN_LOG_LEVEL_WARNING,"WARNING: cannot find %s file: %s (2)\n",file_title,fn);
-	    goto keyerr;
-	  }
+		if(!full_path_to_file) {
+			TURN_LOG_FUNC(TURN_LOG_LEVEL_WARNING,"WARNING: cannot find %s file: %s (2)\n",file_title,fn);
+			goto keyerr;
+		}
 
-	  strncpy(fn,full_path_to_file,sizeof(turn_params.cert_file)-1);
-	  fn[sizeof(turn_params.cert_file)-1]=0;
+		strncpy(fn,full_path_to_file,sizeof(turn_params.cert_file)-1);
+		fn[sizeof(turn_params.cert_file)-1]=0;
 
-	  if(full_path_to_file)
-	    turn_free(full_path_to_file,strlen(full_path_to_file)+1);
-	  return;
+		if(full_path_to_file)
+			turn_free(full_path_to_file,strlen(full_path_to_file)+1);
+		return;
 	}
 
 	keyerr:
@@ -2496,7 +2484,7 @@ static void adjust_key_file_name(char *fn, const char* file_title, int critical)
 		if(critical) {
 			turn_params.no_tls = 1;
 			turn_params.no_dtls = 1;
-			  TURN_LOG_FUNC(TURN_LOG_LEVEL_WARNING,"WARNING: cannot start TLS and DTLS listeners because %s file is not set properly\n",file_title);
+			TURN_LOG_FUNC(TURN_LOG_LEVEL_WARNING,"WARNING: cannot start TLS and DTLS listeners because %s file is not set properly\n",file_title);
 		}
 		if(full_path_to_file)
 			turn_free(full_path_to_file,strlen(full_path_to_file)+1);
@@ -2517,12 +2505,12 @@ static DH *get_dh566(void) {
 
 
 	unsigned char dh566_p[] = {
-					0x36,0x53,0xA8,0x9C,0x3C,0xF1,0xD1,0x1B,0x2D,0xA2,0x64,0xDE,
-					0x59,0x3B,0xE3,0x8C,0x27,0x74,0xC2,0xBE,0x9B,0x6D,0x56,0xE7,
-					0xDF,0xFF,0x67,0x6A,0xD2,0x0C,0xE8,0x9E,0x52,0x00,0x05,0xB3,
-					0x53,0xF7,0x1C,0x41,0xB2,0xAC,0x38,0x16,0x32,0x3A,0x8E,0x90,
-					0x6C,0x7E,0xD1,0x44,0xCB,0xF9,0x2D,0x1E,0x4A,0x9A,0x32,0x81,
-					0x58,0xE1,0xE1,0x17,0xC1,0x9C,0xF1,0x1E,0x96,0x2D,0x5F
+			0x36,0x53,0xA8,0x9C,0x3C,0xF1,0xD1,0x1B,0x2D,0xA2,0x64,0xDE,
+			0x59,0x3B,0xE3,0x8C,0x27,0x74,0xC2,0xBE,0x9B,0x6D,0x56,0xE7,
+			0xDF,0xFF,0x67,0x6A,0xD2,0x0C,0xE8,0x9E,0x52,0x00,0x05,0xB3,
+			0x53,0xF7,0x1C,0x41,0xB2,0xAC,0x38,0x16,0x32,0x3A,0x8E,0x90,
+			0x6C,0x7E,0xD1,0x44,0xCB,0xF9,0x2D,0x1E,0x4A,0x9A,0x32,0x81,
+			0x58,0xE1,0xE1,0x17,0xC1,0x9C,0xF1,0x1E,0x96,0x2D,0x5F
 	};
 
 //	-----BEGIN DH PARAMETERS-----
@@ -2548,18 +2536,18 @@ static DH *get_dh566(void) {
 static DH *get_dh1066(void) {
 
 	unsigned char dh1066_p[] = {
-					0x02,0x0E,0x26,0x6F,0xAA,0x9F,0xA8,0xE5,0x3F,0x70,0x88,0xF1,
-					0xA9,0x29,0xAE,0x1A,0x2B,0xA8,0x2F,0xE8,0xE5,0x0E,0x81,0x78,
-					0xD7,0x12,0x41,0xDC,0xE2,0xD5,0x10,0x6F,0x8A,0x35,0x23,0xCE,
-					0x66,0x93,0x67,0x14,0xEA,0x0A,0x61,0xD4,0x43,0x63,0x5C,0xDF,
-					0xDE,0xF5,0xB9,0xC6,0xB4,0x8C,0xBA,0x1A,0x25,0x9F,0x73,0x0F,
-					0x1E,0x1A,0x97,0x42,0x2E,0x60,0x9E,0x4C,0x3C,0x70,0x6A,0xFB,
-					0xDD,0xAA,0x7A,0x48,0xA5,0x1E,0x87,0xC8,0xA3,0x5E,0x26,0x40,
-					0x1B,0xDE,0x08,0x5E,0xA2,0xB8,0xE8,0x76,0x43,0xE8,0xF1,0x4B,
-					0x35,0x4C,0x38,0x92,0xB9,0xFF,0x61,0xE6,0x6C,0xBA,0xF9,0x16,
-					0x36,0x3C,0x69,0x2D,0x57,0x90,0x62,0x8A,0xD0,0xD4,0xFB,0xB2,
-					0x5A,0x61,0x99,0xA9,0xE8,0x93,0x80,0xA2,0xB7,0xDC,0xB1,0x6A,
-					0xAF,0xE3
+			0x02,0x0E,0x26,0x6F,0xAA,0x9F,0xA8,0xE5,0x3F,0x70,0x88,0xF1,
+			0xA9,0x29,0xAE,0x1A,0x2B,0xA8,0x2F,0xE8,0xE5,0x0E,0x81,0x78,
+			0xD7,0x12,0x41,0xDC,0xE2,0xD5,0x10,0x6F,0x8A,0x35,0x23,0xCE,
+			0x66,0x93,0x67,0x14,0xEA,0x0A,0x61,0xD4,0x43,0x63,0x5C,0xDF,
+			0xDE,0xF5,0xB9,0xC6,0xB4,0x8C,0xBA,0x1A,0x25,0x9F,0x73,0x0F,
+			0x1E,0x1A,0x97,0x42,0x2E,0x60,0x9E,0x4C,0x3C,0x70,0x6A,0xFB,
+			0xDD,0xAA,0x7A,0x48,0xA5,0x1E,0x87,0xC8,0xA3,0x5E,0x26,0x40,
+			0x1B,0xDE,0x08,0x5E,0xA2,0xB8,0xE8,0x76,0x43,0xE8,0xF1,0x4B,
+			0x35,0x4C,0x38,0x92,0xB9,0xFF,0x61,0xE6,0x6C,0xBA,0xF9,0x16,
+			0x36,0x3C,0x69,0x2D,0x57,0x90,0x62,0x8A,0xD0,0xD4,0xFB,0xB2,
+			0x5A,0x61,0x99,0xA9,0xE8,0x93,0x80,0xA2,0xB7,0xDC,0xB1,0x6A,
+			0xAF,0xE3
 	};
 
 //	-----BEGIN DH PARAMETERS-----
@@ -2586,28 +2574,28 @@ static DH *get_dh1066(void) {
 static DH *get_dh2066(void) {
 
 	unsigned char dh2066_p[] = {
-					0x03,0x31,0x77,0x20,0x58,0xA6,0x69,0xA3,0x9D,0x2D,0x5E,0xE0,
-					0x5C,0x46,0x82,0x0F,0x9E,0x80,0xF0,0x00,0x2A,0xF9,0x0F,0x62,
-					0x1F,0x89,0xCE,0x7D,0x2A,0xFD,0xC5,0x9A,0x7C,0x6A,0x60,0x2C,
-					0xF1,0xDD,0xD4,0x4D,0x6B,0xCD,0xE9,0x95,0xDB,0x42,0x97,0xBA,
-					0xE4,0xAF,0x41,0x38,0x8F,0x57,0x31,0xA4,0x39,0xDD,0x31,0xC3,
-					0x6F,0x98,0x0E,0xE3,0xB1,0x43,0xD1,0x36,0xB0,0x01,0x28,0x42,
-					0x71,0xD3,0xB0,0x36,0xA0,0x47,0x99,0x25,0x9B,0x32,0xF5,0x86,
-					0xB1,0x13,0x5C,0x24,0x8D,0x8D,0x7F,0xE2,0x7F,0x9A,0xC1,0x52,
-					0x58,0xC0,0x63,0xAA,0x00,0x7C,0x1F,0x11,0xBD,0xAC,0x4C,0x2D,
-					0xE0,0xA2,0x9D,0x4E,0x21,0xE4,0x0B,0xCD,0x24,0x92,0xD2,0x37,
-					0x27,0x84,0x59,0x90,0x46,0x2F,0xD5,0xB9,0x27,0x93,0x18,0x88,
-					0xBD,0x91,0x5B,0x87,0x55,0x56,0xD8,0x1B,0xE4,0xCF,0x1C,0xAA,
-					0xBC,0xCF,0x80,0x1E,0x35,0x2D,0xB1,0xBC,0x35,0x31,0x92,0x62,
-					0x3C,0x91,0x8D,0x62,0xDA,0xCF,0x83,0x63,0x12,0x4B,0x30,0x80,
-					0xEE,0x82,0x3C,0x2C,0xD2,0x17,0x13,0x1F,0xF9,0x62,0x33,0x5C,
-					0x63,0xD8,0x75,0x5B,0xAA,0x16,0x5A,0x36,0x49,0x17,0x77,0xB7,
-					0x74,0xBD,0x3E,0x3F,0x98,0x20,0x59,0x5E,0xC7,0x72,0xE8,0xA3,
-					0x89,0x21,0xB4,0x3C,0x25,0xF4,0xF4,0x21,0x96,0x5A,0xA6,0x77,
-					0xFF,0x2C,0x3A,0xFC,0x98,0x5F,0xC1,0xBF,0x2A,0xCF,0xB8,0x62,
-					0x67,0x23,0xE8,0x2F,0xCC,0x7B,0x32,0x1B,0x6B,0x33,0x67,0x0A,
-					0xCB,0xD0,0x1F,0x65,0xD7,0x84,0x54,0xF6,0xF1,0x88,0xB5,0xBB,
-					0x0C,0x63,0x65,0x34,0xE4,0x66,0x4B
+			0x03,0x31,0x77,0x20,0x58,0xA6,0x69,0xA3,0x9D,0x2D,0x5E,0xE0,
+			0x5C,0x46,0x82,0x0F,0x9E,0x80,0xF0,0x00,0x2A,0xF9,0x0F,0x62,
+			0x1F,0x89,0xCE,0x7D,0x2A,0xFD,0xC5,0x9A,0x7C,0x6A,0x60,0x2C,
+			0xF1,0xDD,0xD4,0x4D,0x6B,0xCD,0xE9,0x95,0xDB,0x42,0x97,0xBA,
+			0xE4,0xAF,0x41,0x38,0x8F,0x57,0x31,0xA4,0x39,0xDD,0x31,0xC3,
+			0x6F,0x98,0x0E,0xE3,0xB1,0x43,0xD1,0x36,0xB0,0x01,0x28,0x42,
+			0x71,0xD3,0xB0,0x36,0xA0,0x47,0x99,0x25,0x9B,0x32,0xF5,0x86,
+			0xB1,0x13,0x5C,0x24,0x8D,0x8D,0x7F,0xE2,0x7F,0x9A,0xC1,0x52,
+			0x58,0xC0,0x63,0xAA,0x00,0x7C,0x1F,0x11,0xBD,0xAC,0x4C,0x2D,
+			0xE0,0xA2,0x9D,0x4E,0x21,0xE4,0x0B,0xCD,0x24,0x92,0xD2,0x37,
+			0x27,0x84,0x59,0x90,0x46,0x2F,0xD5,0xB9,0x27,0x93,0x18,0x88,
+			0xBD,0x91,0x5B,0x87,0x55,0x56,0xD8,0x1B,0xE4,0xCF,0x1C,0xAA,
+			0xBC,0xCF,0x80,0x1E,0x35,0x2D,0xB1,0xBC,0x35,0x31,0x92,0x62,
+			0x3C,0x91,0x8D,0x62,0xDA,0xCF,0x83,0x63,0x12,0x4B,0x30,0x80,
+			0xEE,0x82,0x3C,0x2C,0xD2,0x17,0x13,0x1F,0xF9,0x62,0x33,0x5C,
+			0x63,0xD8,0x75,0x5B,0xAA,0x16,0x5A,0x36,0x49,0x17,0x77,0xB7,
+			0x74,0xBD,0x3E,0x3F,0x98,0x20,0x59,0x5E,0xC7,0x72,0xE8,0xA3,
+			0x89,0x21,0xB4,0x3C,0x25,0xF4,0xF4,0x21,0x96,0x5A,0xA6,0x77,
+			0xFF,0x2C,0x3A,0xFC,0x98,0x5F,0xC1,0xBF,0x2A,0xCF,0xB8,0x62,
+			0x67,0x23,0xE8,0x2F,0xCC,0x7B,0x32,0x1B,0x6B,0x33,0x67,0x0A,
+			0xCB,0xD0,0x1F,0x65,0xD7,0x84,0x54,0xF6,0xF1,0x88,0xB5,0xBB,
+			0x0C,0x63,0x65,0x34,0xE4,0x66,0x4B
 	};
 
 //	-----BEGIN DH PARAMETERS-----
@@ -2809,15 +2797,15 @@ static void set_ctx(SSL_CTX** out, const char *protocol, const SSL_METHOD* metho
 		DH *dh = NULL;
 		if(turn_params.dh_file[0]) {
 			FILE *paramfile = fopen(turn_params.dh_file, "r");
-			 if (!paramfile) {
-				 perror("Cannot open DH file");
-			 } else {
-			   dh = PEM_read_DHparams(paramfile, NULL, NULL, NULL);
-			   fclose(paramfile);
-			   if(dh) {
-				   turn_params.dh_key_size = DH_CUSTOM;
-			   }
-			 }
+			if (!paramfile) {
+				perror("Cannot open DH file");
+			} else {
+				dh = PEM_read_DHparams(paramfile, NULL, NULL, NULL);
+				fclose(paramfile);
+				if(dh) {
+					turn_params.dh_key_size = DH_CUSTOM;
+				}
+			}
 		}
 
 		if(!dh) {
@@ -2872,7 +2860,7 @@ static void set_ctx(SSL_CTX** out, const char *protocol, const SSL_METHOD* metho
 #endif
 
 #if defined(SSL_OP_NO_SSLv2)
-			op |= SSL_OP_NO_SSLv3;
+		op |= SSL_OP_NO_SSLv3;
 #endif
 
 		if(turn_params.no_tlsv1)
@@ -2964,7 +2952,7 @@ static void openssl_load_certificates(void)
 			set_ctx(&turn_params.tls_ctx_v1_0,"TLS1.0",TLSv1_server_method());
 		}
 #if TLSv1_1_SUPPORTED
-		if(!turn_params.no_tlsv1_1) {
+			if(!turn_params.no_tlsv1_1) {
 			set_ctx(&turn_params.tls_ctx_v1_1,"TLS1.1",TLSv1_1_server_method());
 		}
 #if TLSv1_2_SUPPORTED

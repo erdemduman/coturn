@@ -168,156 +168,155 @@ typedef struct _turn_params_ {
 
 //////////////// OpenSSL group //////////////////////
 
-  SSL_CTX *tls_ctx_ssl23;
-  
-  SSL_CTX *tls_ctx_v1_0;
-  
+	SSL_CTX *tls_ctx_ssl23;
+
+	SSL_CTX *tls_ctx_v1_0;
+
 #if TLSv1_1_SUPPORTED
-  SSL_CTX *tls_ctx_v1_1;
+	SSL_CTX *tls_ctx_v1_1;
 #if TLSv1_2_SUPPORTED
   SSL_CTX *tls_ctx_v1_2;
 #endif
 #endif
-  
+
 #if DTLS_SUPPORTED
-  SSL_CTX *dtls_ctx;
+	SSL_CTX *dtls_ctx;
 #if DTLSv1_2_SUPPORTED
   SSL_CTX *dtls_ctx_v1_2;
 #endif
 #endif
-  
-  DH_KEY_SIZE dh_key_size;
-  
-  char cipher_list[1025];
-  char ec_curve_name[33];
-  
-  char ca_cert_file[1025];
-  char cert_file[1025];
-  char pkey_file[1025];
-  char tls_password[513];
-  char dh_file[1025];
 
-  int no_tlsv1;
-  int no_tlsv1_1;
-  int no_tlsv1_2;
-  int no_tls;
-  int no_dtls;
+	DH_KEY_SIZE dh_key_size;
 
-  struct event *tls_ctx_update_ev;
-  pthread_mutex_t tls_mutex;
+	char cipher_list[1025];
+	char ec_curve_name[33];
+
+	char ca_cert_file[1025];
+	char cert_file[1025];
+	char pkey_file[1025];
+	char tls_password[513];
+	char dh_file[1025];
+
+	int no_tlsv1;
+	int no_tlsv1_1;
+	int no_tlsv1_2;
+	int no_tls;
+	int no_dtls;
+
+	struct event *tls_ctx_update_ev;
+	pthread_mutex_t tls_mutex;
 
 //////////////// Common params ////////////////////
 
-  int verbose;
-  int turn_daemon;
-  int prod;
+	int verbose;
+	int turn_daemon;
+	int prod;
 
-  int do_not_use_config_file;
+	int do_not_use_config_file;
 
-  char pidfile[1025];
+	char pidfile[1025];
 
-  ////////////////  Listener server /////////////////
+	////////////////  Listener server /////////////////
 
-  int listener_port;
-  int tls_listener_port;
-  int alt_listener_port;
-  int alt_tls_listener_port;
-  int rfc5780;
+	int listener_port;
+	int tls_listener_port;
+	int alt_listener_port;
+	int alt_tls_listener_port;
+	int rfc5780;
 
-  int no_udp;
-  int no_tcp;
-  
-  vint no_tcp_relay;
-  vint no_udp_relay;
+	int no_udp;
+	int no_tcp;
 
-  char listener_ifname[1025];
+	vint no_tcp_relay;
+	vint no_udp_relay;
 
-  char redis_statsdb[1025];
-  int use_redis_statsdb;
+	char listener_ifname[1025];
 
-  struct listener_server listener;
+	char redis_statsdb[1025];
+	int use_redis_statsdb;
 
-  ip_range_list_t ip_whitelist;
-  ip_range_list_t ip_blacklist;
+	struct listener_server listener;
 
-  NET_ENG_VERSION net_engine_version;
-  const char* net_engine_version_txt[NEV_TOTAL];
+	ip_range_list_t ip_whitelist;
+	ip_range_list_t ip_blacklist;
+
+	NET_ENG_VERSION net_engine_version;
+	const char* net_engine_version_txt[NEV_TOTAL];
 
 //////////////// Relay servers /////////////
 
-  u16bits min_port;
-  u16bits max_port;
+	u16bits min_port;
+	u16bits max_port;
 
-  vint check_origin;
+	vint check_origin;
 
-  vint no_multicast_peers;
-  vint no_loopback_peers;
+	vint no_multicast_peers;
+	vint no_loopback_peers;
 
-  char relay_ifname[1025];
+	char relay_ifname[1025];
 
-  size_t relays_number;
-  char **relay_addrs;
-  int default_relays;
+	size_t relays_number;
+	char **relay_addrs;
+	int default_relays;
 
-  // Single global public IP.
-  // If multiple public IPs are used
-  // then ioa_addr mapping must be used.
-  ioa_addr *external_ip;
+	// Single global public IP.
+	// If multiple public IPs are used
+	// then ioa_addr mapping must be used.
+	ioa_addr *external_ip;
 
-  turnserver_id general_relay_servers_number;
-  turnserver_id udp_relay_servers_number;
+	turnserver_id general_relay_servers_number;
+	turnserver_id udp_relay_servers_number;
 
 ////////////// Auth server ////////////////
 
-  char oauth_server_name[1025];
-  char domain[1025];
-  int oauth;
+	char oauth_server_name[1025];
+	char domain[1025];
+	int oauth;
 
 /////////////// AUX SERVERS ////////////////
 
-  turn_server_addrs_list_t aux_servers_list;
-  int udp_self_balance;
+	turn_server_addrs_list_t aux_servers_list;
+	int udp_self_balance;
 
 /////////////// ALTERNATE SERVERS ////////////////
 
-  turn_server_addrs_list_t alternate_servers_list;
-  turn_server_addrs_list_t tls_alternate_servers_list;
+	turn_server_addrs_list_t alternate_servers_list;
+	turn_server_addrs_list_t tls_alternate_servers_list;
 
-  int stop_turn_server;
+	int stop_turn_server;
 
 ////////////// MISC PARAMS ////////////////
 
-  vint stun_only;
-  vint no_stun;
-  vint secure_stun;
-  int server_relay;
-  int fingerprint;
-  char rest_api_separator;
-  vint stale_nonce;
-  vint max_allocate_lifetime;
-  vint channel_lifetime;
-  vint permission_lifetime;
-  vint mobility;
-  turn_credential_type ct;
-  int use_auth_secret_with_timestamp;
-  band_limit_t max_bps;
-  band_limit_t bps_capacity;
-  band_limit_t bps_capacity_allocated;
-  vint total_quota;
-  vint user_quota;
+	vint stun_only;
+	vint no_stun;
+	vint secure_stun;
+	int server_relay;
+	int fingerprint;
+	char rest_api_separator;
+	vint stale_nonce;
+	vint max_allocate_lifetime;
+	vint channel_lifetime;
+	vint permission_lifetime;
+	vint mobility;
+	turn_credential_type ct;
+	int use_auth_secret_with_timestamp;
+	band_limit_t max_bps;
+	band_limit_t bps_capacity;
+	band_limit_t bps_capacity_allocated;
+	vint total_quota;
+	vint user_quota;
 
 /////// Users DB ///////////
 
-  default_users_db_t default_users_db;
+	default_users_db_t default_users_db;
 
 /////// CPUs //////////////
 
-  unsigned long cpus;
+	unsigned long cpus;
 
-  ///////// Encryption /////////
-  char secret_key_file[1025];
-  unsigned char secret_key[1025];
-  int allow_encoding;
+	///////// Encryption /////////
+	char secret_key_file[1025];
+	unsigned char secret_key[1025];
 
 } turn_params_t;
 
